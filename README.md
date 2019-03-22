@@ -1,4 +1,4 @@
-# EOSIO SDK for Java Android Soft Key Signature Provider
+# EOSIO SDK for Java Android Soft Key Signature Provider ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
 
 ## Overview
 
