@@ -12,8 +12,7 @@ steps:
     label: "Build Library"
     agents:
      - "queue=automation-android-builder-fleet"
-
-  - wait
+     
 
   - command: |
       gradle test
