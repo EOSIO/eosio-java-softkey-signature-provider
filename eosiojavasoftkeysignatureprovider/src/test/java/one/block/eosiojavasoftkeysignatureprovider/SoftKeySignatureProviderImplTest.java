@@ -117,6 +117,7 @@ public class SoftKeySignatureProviderImplTest {
             provider.importKey(privateKeyR1EOS);
         } catch (ImportKeyError importKeyError) {
             importKeyError.printStackTrace();
+            fail("Should not throw error!!!");
         }
 
         try {

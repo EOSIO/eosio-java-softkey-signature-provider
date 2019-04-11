@@ -148,7 +148,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_FORMAT_SIGNATURE_ERROR, eosFormatterError);
         }
 
-        return new EosioTransactionSignatureResponse(serializedTransaction, Arrays.asList(eosFormatSignature), null);
+        return new EosioTransactionSignatureResponse(serializedTransaction, Collections.singletonList(eosFormatSignature), null);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     /**
      * Whether getAvailableKeys return WIF legacy format for K1 key
      *
-     * @return
+     * @return Whether getAvailableKeys return WIF legacy format for K1 key
      */
     public boolean isReturnLegacyFormatForK1() {
         return returnLegacyFormatForK1;
@@ -182,7 +182,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     /**
      * Set returnLegacyFormatForK1 to true to get WIF Legacy format for K1 public key on getAvailableKey
      *
-     * @param returnLegacyFormatForK1
+     * @param returnLegacyFormatForK1 true for getting WIF Legacy format of K1 public key on getAvailableKey
      */
     public void setReturnLegacyFormatForK1(boolean returnLegacyFormatForK1) {
         this.returnLegacyFormatForK1 = returnLegacyFormatForK1;
