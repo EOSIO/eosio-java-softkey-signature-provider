@@ -63,6 +63,19 @@ Then refresh your gradle project.
 
 Now Softkey signature provider is ready for use within EOSIO SDK for Java according to the [EOSIO SDK for Java Basic Usage instructions](https://github.com/EOSIO/eosio-java/tree/develop#basic-usage).
 
+## Android usage
+
+Add this code to build.gradle in your app module:
+
+```gradle
+// Needed to get bitcoin-j to produce a valid apk for android.
+packagingOptions {
+    exclude 'lib/x86_64/darwin/libscrypt.dylib'
+    exclude 'lib/x86_64/freebsd/libscrypt.so'
+    exclude 'lib/x86_64/linux/libscrypt.so'
+}
+```
+
 ## Contributing
 
 [Contributing Guide](./CONTRIBUTING.md)
