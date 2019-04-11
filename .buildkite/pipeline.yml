@@ -1,6 +1,6 @@
 steps:
   - command: |
-      ls -la && git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop
+      cd .. && git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop && cd .. && cd eosio-java-softkey-signature-provider
     label: "Fetch Eosio-Java Lib"
     agents:
      - "queue=automation-android-builder-fleet"
