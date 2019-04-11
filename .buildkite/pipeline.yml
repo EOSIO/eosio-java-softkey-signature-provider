@@ -1,5 +1,13 @@
 steps:
   - command: |
+      git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop
+    label: "Fetch Eosio-Java Lib"
+    agents:
+     - "queue=automation-android-builder-fleet"
+
+  - wait
+
+  - command: |
       gradle build
     label: "Build Library"
     agents:
