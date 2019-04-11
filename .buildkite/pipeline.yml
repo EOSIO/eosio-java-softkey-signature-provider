@@ -1,21 +1,14 @@
 steps:
-  - command: |
-      cd .. && git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop && cd .. && cd eosio-java-softkey-signature-provider
-    label: "Fetch Eosio-Java Lib"
-    agents:
-     - "queue=automation-android-builder-fleet"
-
-  - wait
 
   - command: |
-      gradle build
+      cd .. && git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop && cd .. && cd eosio-java-softkey-signature-provider && gradle build
     label: "Build Library"
     agents:
      - "queue=automation-android-builder-fleet"
-     
+
 
   - command: |
-      gradle test
+      cd .. && git clone git@github.com:EOSIO/eosio-java.git && cd eosio-java && git checkout develop && cd .. && cd eosio-java-softkey-signature-provider && gradle test
     label: "Run Tests"
     agents:
      - "queue=automation-android-builder-fleet"
