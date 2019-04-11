@@ -122,6 +122,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         }
 
         // Throw error if found no private key with input public key
+        //noinspection ConstantConditions
         if (privateKeyBI.equals(BigInteger.ZERO) || curve == null) {
             throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_KEY_NOT_FOUND, publicKey));
         }
