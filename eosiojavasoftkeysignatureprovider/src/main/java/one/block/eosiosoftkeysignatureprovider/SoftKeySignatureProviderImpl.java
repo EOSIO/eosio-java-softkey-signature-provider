@@ -14,17 +14,17 @@ import one.block.eosiojava.utilities.PEMProcessor;
 import one.block.eosiosoftkeysignatureprovider.error.ImportKeyError;
 import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstant;
 import org.bitcoinj.core.Sha256Hash;
-import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
-import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.util.encoders.Hex;
 import org.jetbrains.annotations.NotNull;
-import sun.security.util.Pem;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This file is a placeholder until development starts.
@@ -45,6 +45,16 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
      * Maximum re-try time should the signature provider try to create a canonical signature for K1 key
      */
     private static final int MAX_NOT_CANONICAL_RE_SIGN = 100;
+
+    /**
+     * Index of R value in the signature result of softkey signing
+     */
+    private static final int R_INDEX = 0;
+
+    /**
+     * Index of S value in the signature result of softkey signing
+     */
+    private static final int S_INDEX = 1;
 
     /**
      * Import private key into softkey signature provider
@@ -146,27 +156,29 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             }
 
             for (int i = 0; i < MAX_NOT_CANONICAL_RE_SIGN; i++) {
+                // Sign transaction
+                // Use default constructor to have signature generated with secureRandom, otherwise it would generate same signature for same key all the time
+                ECDSASigner signer = new ECDSASigner();
+
+                ECDomainParameters domainParameters;
                 try {
-                    // Sign transaction
-                    // Use default constructor to have signature generated with secureRandom, otherwise it would generate same signature for same key all the time
-                    ECDSASigner signer = new ECDSASigner();
+                    domainParameters = PEMProcessor.getCurveDomainParameters(curve);
+                } catch (PEMProcessorError processorError) {
+                    throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
+                }
 
-                    ECDomainParameters domainParameters;
-                    try {
-                        domainParameters = PEMProcessor.getCurveDomainParameters(curve);
-                    } catch (PEMProcessorError processorError) {
-                        throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
-                    }
+                ECPrivateKeyParameters parameters = new ECPrivateKeyParameters(privateKeyBI, domainParameters);
+                signer.init(true, parameters);
+                BigInteger[] signatureComponents = signer.generateSignature(hashedMessage);
 
-                    ECPrivateKeyParameters parameters = new ECPrivateKeyParameters(privateKeyBI, domainParameters);
-                    signer.init(true, parameters);
-                    BigInteger[] signatureComponents = signer.generateSignature(hashedMessage);
-                    String signature = EOSFormatter.convertRawRandSofSignatureToEOSFormat(signatureComponents[0].toString(), signatureComponents[1].toString(), message, EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey));
+                try {
+                    String signature = EOSFormatter.convertRawRandSofSignatureToEOSFormat(signatureComponents[R_INDEX].toString(), signatureComponents[S_INDEX].toString(), message, EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey));
                     // Format Signature
                     signatures.add(signature);
                     break;
                 }  catch (EOSFormatterError eosFormatterError) {
-                    if (eosFormatterError.getCause() instanceof EosFormatterSignatureIsNotCanonicalError) {
+                    // In theory, Non-canonical error only happened with K1 key
+                    if (eosFormatterError.getCause() instanceof EosFormatterSignatureIsNotCanonicalError && curve == AlgorithmEmployed.SECP256K1) {
                         // Try to sign again until MAX_NOT_CANONICAL_RE_SIGN is reached or get a canonical signature
                         continue;
                     }
