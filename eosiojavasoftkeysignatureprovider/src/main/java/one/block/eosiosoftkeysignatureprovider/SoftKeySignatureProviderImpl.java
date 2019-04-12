@@ -1,6 +1,7 @@
 package one.block.eosiosoftkeysignatureprovider;
 
 import one.block.eosiojava.enums.AlgorithmEmployed;
+import one.block.eosiojava.error.EosioError;
 import one.block.eosiojava.error.signatureProvider.GetAvailableKeysError;
 import one.block.eosiojava.error.signatureProvider.SignTransactionError;
 import one.block.eosiojava.error.utilities.EOSFormatterError;
@@ -131,13 +132,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                     String innerPublicKeyPEM = availableKeyProcessor.extractPEMPublicKeyFromPrivateKey(this.returnLegacyFormatForK1);
 
                     // Convert input public key to PEM format for comparision
-                    String inputPublicKeyPEM;
-
-                    try {
-                        inputPublicKeyPEM = EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey);
-                    } catch (EOSFormatterError eosFormatterError) {
-                        throw new SignTransactionError(eosFormatterError);
-                    }
+                    String inputPublicKeyPEM = EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey);
 
                     if (innerPublicKeyPEM.equals(inputPublicKeyPEM)) {
                         privateKeyBI = new BigInteger(availableKeyProcessor.getKeyData());
@@ -145,8 +140,8 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                         break;
                     }
                 }
-            } catch (PEMProcessorError processorError) {
-                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_SEARCH_KEY_ERROR, inputPublicKey), processorError);
+            } catch (EosioError error) {
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_SEARCH_KEY_ERROR, inputPublicKey), error);
             }
 
             // Throw error if found no private key with input public key
