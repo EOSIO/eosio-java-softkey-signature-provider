@@ -4,6 +4,7 @@ import one.block.eosiojava.enums.AlgorithmEmployed;
 import one.block.eosiojava.error.signatureProvider.GetAvailableKeysError;
 import one.block.eosiojava.error.signatureProvider.SignTransactionError;
 import one.block.eosiojava.error.utilities.EOSFormatterError;
+import one.block.eosiojava.error.utilities.EosFormatterSignatureIsNotCanonicalError;
 import one.block.eosiojava.error.utilities.PEMProcessorError;
 import one.block.eosiojava.interfaces.ISignatureProvider;
 import one.block.eosiojava.models.signatureProvider.EosioTransactionSignatureRequest;
@@ -20,6 +21,7 @@ import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.util.encoders.Hex;
 import org.jetbrains.annotations.NotNull;
+import sun.security.util.Pem;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -38,6 +40,11 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
      * Whether getAvailableKeys return WIF legacy format for K1 key
      */
     private boolean returnLegacyFormatForK1;
+
+    /**
+     * Maximum re-try time should the signature provider try to create a canonical signature for K1 key
+     */
+    private static final int MAX_NOT_CANONICAL_RE_SIGN = 100;
 
     /**
      * Import private key into softkey signature provider
@@ -95,60 +102,81 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
         }
 
-        // Getting public key and search for the corresponding private key
-        String publicKey = eosioTransactionSignatureRequest.getSigningPublicKey().get(0);
-
         if (this.keys.isEmpty()) {
             throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_NO_KEY_AVAILABLE);
         }
 
-        BigInteger privateKeyBI = BigInteger.ZERO;
-        AlgorithmEmployed curve = null;
+        List<String> signatures = new ArrayList<>();
 
-        try {
-            // Search for corresponding private key
-            for (String key : keys) {
-                PEMProcessor processor = new PEMProcessor(key);
-                String innerPublicKey = processor.extractEOSPublicKeyFromPrivateKey(this.returnLegacyFormatForK1);
-                if (innerPublicKey.equals(publicKey)) {
-                    privateKeyBI = new BigInteger(processor.getKeyData());
-                    curve = processor.getAlgorithm();
+        // Getting public key and search for the corresponding private key
+        for (String inputPublicKey : eosioTransactionSignatureRequest.getSigningPublicKey()) {
+            BigInteger privateKeyBI = BigInteger.ZERO;
+            AlgorithmEmployed curve = null;
+
+            try {
+                // Search for corresponding private key
+                for (String key : keys) {
+                    PEMProcessor availableKeyProcessor = new PEMProcessor(key);
+                    //Extract public key in PEM format from inner private key
+                    String innerPublicKeyPEM = availableKeyProcessor.extractPEMPublicKeyFromPrivateKey(this.returnLegacyFormatForK1);
+
+                    // Convert input public key to PEM format for comparision
+                    String inputPublicKeyPEM;
+
+                    try {
+                        inputPublicKeyPEM = EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey);
+                    } catch (EOSFormatterError eosFormatterError) {
+                        throw new SignTransactionError(eosFormatterError);
+                    }
+
+                    if (innerPublicKeyPEM.equals(inputPublicKeyPEM)) {
+                        privateKeyBI = new BigInteger(availableKeyProcessor.getKeyData());
+                        curve = availableKeyProcessor.getAlgorithm();
+                        break;
+                    }
+                }
+            } catch (PEMProcessorError processorError) {
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_SEARCH_KEY_ERROR, inputPublicKey), processorError);
+            }
+
+            // Throw error if found no private key with input public key
+            //noinspection ConstantConditions
+            if (privateKeyBI.equals(BigInteger.ZERO) || curve == null) {
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_KEY_NOT_FOUND, inputPublicKey));
+            }
+
+            for (int i = 0; i < MAX_NOT_CANONICAL_RE_SIGN; i++) {
+                try {
+                    // Sign transaction
+                    // Use default constructor to have signature generated with secureRandom, otherwise it would generate same signature for same key all the time
+                    ECDSASigner signer = new ECDSASigner();
+
+                    ECDomainParameters domainParameters;
+                    try {
+                        domainParameters = PEMProcessor.getCurveDomainParameters(curve);
+                    } catch (PEMProcessorError processorError) {
+                        throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
+                    }
+
+                    ECPrivateKeyParameters parameters = new ECPrivateKeyParameters(privateKeyBI, domainParameters);
+                    signer.init(true, parameters);
+                    BigInteger[] signatureComponents = signer.generateSignature(hashedMessage);
+                    String signature = EOSFormatter.convertRawRandSofSignatureToEOSFormat(signatureComponents[0].toString(), signatureComponents[1].toString(), message, EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey));
+                    // Format Signature
+                    signatures.add(signature);
                     break;
+                }  catch (EOSFormatterError eosFormatterError) {
+                    if (eosFormatterError.getCause() instanceof EosFormatterSignatureIsNotCanonicalError) {
+                        // Try to sign again until MAX_NOT_CANONICAL_RE_SIGN is reached or get a canonical signature
+                        continue;
+                    }
+
+                    throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_FORMAT_SIGNATURE_ERROR, eosFormatterError);
                 }
             }
-        } catch (PEMProcessorError processorError) {
-            throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_SEARCH_KEY_ERROR, publicKey), processorError);
         }
 
-        // Throw error if found no private key with input public key
-        //noinspection ConstantConditions
-        if (privateKeyBI.equals(BigInteger.ZERO) || curve == null) {
-            throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_KEY_NOT_FOUND, publicKey));
-        }
-
-        // Sign transaction
-        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SHA256Digest()));
-
-        ECDomainParameters domainParameters;
-        try {
-            domainParameters = PEMProcessor.getCurveDomainParameters(curve);
-        } catch (PEMProcessorError processorError) {
-            throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
-        }
-
-        ECPrivateKeyParameters parameters = new ECPrivateKeyParameters(privateKeyBI, domainParameters);
-        signer.init(true, parameters);
-        BigInteger[] signatureComponents = signer.generateSignature(hashedMessage);
-
-        // Format Signature
-        String eosFormatSignature;
-        try {
-            eosFormatSignature = EOSFormatter.convertRawRandSofSignatureToEOSFormat(signatureComponents[0].toString(), signatureComponents[1].toString(), message, EOSFormatter.convertEOSPublicKeyToPEMFormat(publicKey));
-        } catch (EOSFormatterError eosFormatterError) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_FORMAT_SIGNATURE_ERROR, eosFormatterError);
-        }
-
-        return new EosioTransactionSignatureResponse(serializedTransaction, Collections.singletonList(eosFormatSignature), null);
+        return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
     }
 
     @Override

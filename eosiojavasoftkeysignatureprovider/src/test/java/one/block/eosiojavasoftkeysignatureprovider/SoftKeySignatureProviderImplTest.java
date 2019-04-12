@@ -23,6 +23,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -134,7 +135,6 @@ public class SoftKeySignatureProviderImplTest {
 
     @Test
     public void signTransactionTest() {
-        String expectedSignature = "SIG_R1_KWbXQW8zLtLz7Bz4uQPbgSeMSztGnGQX16rPWxMxyt2RzEYKWKzYByNMMk9YCDQ9ima9qo64w2b9JBww4YFa2ZfNP5qfM2";
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
@@ -156,7 +156,44 @@ public class SoftKeySignatureProviderImplTest {
             assertNotNull(response);
             assertEquals(serializedTransaction, response.getSerializeTransaction());
             assertEquals(1, request.getSigningPublicKey().size());
-            assertEquals(expectedSignature, response.getSignatures().get(0));
+            assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
+        } catch (SignTransactionError signTransactionError) {
+            signTransactionError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+    }
+
+    @Test
+    public void signTransactionWithMultipleKeyExpectMultiSignatures() {
+        String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
+        String publicKeyK1EOS = "PUB_K1_8CbY5PhQZGF2gzPKRBaNG4YzB4AwpmfnDcVZMSPZTqQMn1uFhB";
+        String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
+        String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
+
+        String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
+        List<String> publicKeys = Arrays.asList(publicKeyR1EOS, publicKeyK1EOS);
+        String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
+        EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
+        SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
+
+        try {
+            provider.importKey(privateKeyR1EOS);
+            provider.importKey(privateKeyK1EOS);
+        } catch (ImportKeyError importKeyError) {
+            importKeyError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+
+        try {
+            EosioTransactionSignatureResponse response = provider.signTransaction(request);
+            assertNotNull(response);
+            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(2, request.getSigningPublicKey().size());
+            assertEquals(request.getSigningPublicKey().size(), response.getSignatures().size());
+
+            for (String signature : response.getSignatures()) {
+                assertTrue(signature.contains("SIG_R1_") || signature.contains("SIG_K1_"));
+            }
         } catch (SignTransactionError signTransactionError) {
             signTransactionError.printStackTrace();
             fail("Should not fail here!!!");
