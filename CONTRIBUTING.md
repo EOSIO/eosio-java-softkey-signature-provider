@@ -6,7 +6,7 @@ Interested in contributing? That's awesome! Here are some guidelines to get star
   - [Bug Reports](#bug-reports)
   - [Feature Requests](#feature-requests)
   - [Change Requests](#change-requests)
-- [Working on EOSIO SDK for Java Soft Key Signature Provider](#working-on-eosio-softkey-signature-provider)
+- [Working on EOSIO SDK for Java Soft Key Signature Provider](#working-on-eosio-sdk-for-java-soft-key-signature-provider)
   - [Feature Branches](#feature-branches)
   - [Developing With Gradle Locally](#developing-with-gradle-locally)
   - [Submitting Pull Requests](#submitting-pull-requests)
@@ -16,7 +16,7 @@ Interested in contributing? That's awesome! Here are some guidelines to get star
 - [Contributor License & Acknowledgments](#contributor-license--acknowledgments)
 - [References](#references)
 
-## Reporting An Issue
+### Reporting An Issue
 
 If you're about to raise an issue because you think you've found a problem with EOSIO SDK for Java Soft Key Signature Provider, or you'd like to make a request for a new feature in the codebase, or any other reason… please read this first.
 
@@ -59,7 +59,7 @@ Change requests cover both architectural and functional changes to how EOSIO SDK
 1. Take a moment to think about the best way to make a case for, and explain what you're thinking. Are you sure this shouldn't really be
    a [bug report](#bug-reports) or a [feature request](#feature-requests)?  Is it really one idea or is it many? What's the context? What problem are you solving? Why is what you are suggesting better than what's already there?
 
-## Working on EOSIO SDK for Java Soft Key Signature Provider
+### Working on EOSIO SDK for Java Soft Key Signature Provider
 
 Code contributions are welcome and encouraged! If you are looking for a good place to start, check out the [good first issue](/../../labels/good%20first%20issue) label in GitHub issues.
 
@@ -89,7 +89,7 @@ Pull requests are awesome. If you're looking to raise a PR for something which d
 
 Never underestimate just how useful quality assurance is. If you're looking to get involved with the code base and don't know where to start, checking out and testing a pull request is one of the most useful things you could do.
 
-Essentially, [check out the latest develop branch](#working-on-eosio-softkey-signature-provider), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
+Essentially, [check out the latest develop branch](#working-on-eosio-sdk-for-java-soft-key-signature-provider), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
 
 ### Code Style and Linting
 
@@ -97,7 +97,7 @@ EOSIO SDK for Java Soft Key Signature Provider leverages [SonarLint](https://www
 
 Please be sure to resolve any linting issues introduced by your contributions prior to requesting a review on your PR.
 
-## Conduct
+### Conduct
 
 While contributing, please be respectful and constructive, so that participation in our project is a positive experience for everyone.
 
@@ -115,7 +115,7 @@ Examples of unacceptable behavior include:
 - Publishing others’ private information, such as a physical or electronic address, without explicit permission
 - Other conduct which could reasonably be considered inappropriate in a professional setting
 
-## Contributor License & Acknowledgments
+### Contributor License & Acknowledgments
 
 Whenever you make a contribution to this project, you license your contribution under the same terms as set out in LICENSE, and you represent and warrant that you have the right to license your contribution under those terms.  Whenever you make a contribution to this project, you also certify in the terms of the Developer’s Certificate of Origin set out below:
 
@@ -159,7 +159,7 @@ By making a contribution to this project, I certify that:
     this project or the open source license(s) involved.
 ```
 
-## References
+### References
 
 * Overall CONTRIB adapted from https://github.com/mathjax/MathJax/blob/master/CONTRIBUTING.md
 * Conduct section adapted from the Contributor Covenant, version 1.4, available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
