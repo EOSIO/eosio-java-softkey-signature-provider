@@ -3,7 +3,6 @@ package one.block.eosiosoftkeysignatureprovider;
 import one.block.eosiojava.enums.AlgorithmEmployed;
 import one.block.eosiojava.error.signatureProvider.GetAvailableKeysError;
 import one.block.eosiojava.error.signatureProvider.SignTransactionError;
-import one.block.eosiojava.error.signatureProvider.SignatureProviderError;
 import one.block.eosiojava.error.utilities.EOSFormatterError;
 import one.block.eosiojava.error.utilities.PEMProcessorError;
 import one.block.eosiojava.interfaces.ISignatureProvider;

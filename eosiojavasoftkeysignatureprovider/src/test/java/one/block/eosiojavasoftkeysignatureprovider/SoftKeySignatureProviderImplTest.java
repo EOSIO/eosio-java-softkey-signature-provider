@@ -22,7 +22,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -138,7 +139,7 @@ public class SoftKeySignatureProviderImplTest {
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -217,7 +218,7 @@ public class SoftKeySignatureProviderImplTest {
 
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
-        List<String> publicKeys = Arrays.asList(); // Set to empty
+        List<String> publicKeys = new ArrayList<>(); // Set to empty
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -241,7 +242,7 @@ public class SoftKeySignatureProviderImplTest {
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -265,7 +266,7 @@ public class SoftKeySignatureProviderImplTest {
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
         String serializedTransaction = "";
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -290,7 +291,7 @@ public class SoftKeySignatureProviderImplTest {
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -320,7 +321,7 @@ public class SoftKeySignatureProviderImplTest {
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -338,7 +339,7 @@ public class SoftKeySignatureProviderImplTest {
         String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
 
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
-        List<String> publicKeys = Arrays.asList(publicKeyR1EOS);
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
         EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
