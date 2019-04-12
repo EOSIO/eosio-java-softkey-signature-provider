@@ -92,7 +92,7 @@ try {
 
 ## Library methods
 
-* [ISignatureProvider](eosiojava/src/main/java/one/block/eosiojava/interfaces/ISignatureProvider.java)
+* [ISignatureProvider](https://github.com/EOSIO/eosio-java/blob/develop/eosiojava/src/main/java/one/block/eosiojava/interfaces/ISignatureProvider.java)
 * [Softkey Signature Provider](https://github.com/EOSIO/eosio-java-softkey-signature-provider) - Example signature provider for signing transactions using R1 and K1 keys in memory.*
 
 *_Softkey Signature Provider stores keys in memory and is therefore not secure. It should only be used for development purposes. In production, we strongly recommend using a signature provider that interfaces with a secure vault, authenticator or wallet._
