@@ -1,5 +1,7 @@
 package one.block.eosiosoftkeysignatureprovider;
 
+
+import com.sun.istack.internal.NotNull;
 import one.block.eosiojava.enums.AlgorithmEmployed;
 import one.block.eosiojava.error.EosioError;
 import one.block.eosiojava.error.signatureProvider.GetAvailableKeysError;
@@ -19,7 +21,6 @@ import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.signers.ECDSASigner;
 import org.bouncycastle.util.encoders.Hex;
-import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
