@@ -1,6 +1,8 @@
+![Java Logo](img/java-logo.png)
 # EOSIO SDK for Java: Softkey Signature Provider ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
 [![Software License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/EOSIO/eosio-java-softkey-signature-provider/blob/master/LICENSE)
 ![Lagnuage Java](https://img.shields.io/badge/Language-Java-yellow.svg)
+![](https://img.shields.io/badge/Deployment%20Target-JVM-blue.svg)
 
 Softkey Signature Provider is an example pluggable signature provider for [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java). It allows for signing transactions using in-memory K1 and R1 keys.
 
