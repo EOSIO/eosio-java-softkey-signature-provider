@@ -1,17 +1,17 @@
 steps:
 
   - command: |
-      cd .. && cd eosio-java-softkey-signature-provider && gradle build
-    label: "Build Library"
-    agents:
-     - "queue=automation-android-builder-fleet"
+      gradle build
+      label: "Build Library"
+      agents:
+      - "queue=automation-android-builder-fleet"
 
 
   - command: |
-      cd .. && cd eosio-java-softkey-signature-provider && gradle test
-    label: "Run Tests"
-    agents:
-     - "queue=automation-android-builder-fleet"
+      gradle test
+      label: "Run Tests"
+      agents:
+      - "queue=automation-android-builder-fleet"
 
   - wait
 
