@@ -1,13 +1,10 @@
 ![Java Logo](img/java-logo.png)
 # EOSIO SDK for Java: Softkey Signature Provider ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
 [![Software License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/EOSIO/eosio-java-softkey-signature-provider/blob/master/LICENSE)
-![Lagnuage Java](https://img.shields.io/badge/Language-Java-yellow.svg)
+![Language Java](https://img.shields.io/badge/Language-Java-yellow.svg)
 ![](https://img.shields.io/badge/Deployment%20Target-JVM-blue.svg)
 
 Softkey Signature Provider is an example pluggable signature provider for [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java). It allows for signing transactions using in-memory K1 and R1 keys.
-
-The Signature Provider abstraction is arguably the most useful of all of the providers. It is responsible for _a)_ finding out what keys are available for signing and _b)_ requesting and obtaining transaction signatures with a subset of the available keys.
-By simply switching out the signature provider on a transaction, signature requests can be routed any number of ways. Need a signature from keys in the platform's Keystore or Secure Enclave? Configure the `TransactionSession` with a conforming signature provider that exposes that functionality. Need signatures from a wallet on the user's device? A signature provider can do that too!
 
 **Important:** Softkey Signature Provider stores keys in memory and is therefore not secure. It should only be used for development purposes. In production, we strongly recommend using a signature provider that interfaces with a KeyStore, authenticator or wallet.
 
@@ -32,7 +29,7 @@ The Signature Provider abstraction is arguably the most useful of all of the [EO
 
 By simply switching out the signature provider on a transaction, signature requests can be routed any number of ways. Need a signature from keys in the platform's Keychain or KeyStore? Configure the `TransactionSession` with a conforming signature provider that exposes that functionality. Need signatures from a wallet on the user's device? A signature provider can do that too!
 
-All signature providers must conform to the [ISignatureProvider](https://github.com/EOSIO/eosio-java/blob/develop/eosiojava/src/main/java/one/block/eosiojava/interfaces/ISignatureProvider.java) Protocol.
+All signature providers must conform to the [ISignatureProvider](https://github.com/EOSIO/eosio-java/blob/master/eosiojava/src/main/java/one/block/eosiojava/interfaces/ISignatureProvider.java) Protocol.
 
 ### Prerequisites
 
@@ -67,7 +64,7 @@ Then refresh your gradle project. Then you're all set for the [Basic Usage](#bas
 
 ## Basic Usage
 
-To Import a private key
+To import a private key:
 
 ```java
 String privateKeyEOS = "Your eos format private key in K1 or R1 type"
@@ -79,8 +76,8 @@ try {
 }
 ```
 
-To sign a `EosioTransactionSignatureRequest`, you should first create it with your serialized transaction and list of public keys. EOSIO SDK for Java handle the creation of the object for you.
-Finally, Call `signTransaction` to sign.
+To sign **an** `EosioTransactionSignatureRequest`, you should first create it with your serialized transaction and list of public keys. EOSIO SDK for Java **handle** the creation of the object for you.
+Finally, call `signTransaction` to sign.
 
 ```java
 try {
@@ -93,12 +90,12 @@ try {
 }
 ```
 
-## Library methods
+## Library Methods
 
 * `signTransaction(EosioTransactionSignatureRequest eosioTransactionSignatureRequest)` signs an `Transaction`
-* `getAvailableKeys()` returns an array, containing the public keys associated with the private keys that the object is initialized with.
+* `getAvailableKeys()` returns an array containing the public keys associated with the private keys that the object is initialized with.
 
-Importing key to memory by calling
+Importing a key by calling:
 
 * `importKey(String privateKey)`
 

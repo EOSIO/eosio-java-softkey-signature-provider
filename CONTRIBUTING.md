@@ -1,4 +1,4 @@
-# Contributing to EOSIO SDK for Java: Soft Key Signature Provider
+# Contributing to EOSIO SDK for Java: Softkey Signature Provider
 
 Interested in contributing? That's awesome! Here are some guidelines to get started quickly and easily:
 
