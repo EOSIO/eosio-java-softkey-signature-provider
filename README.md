@@ -76,7 +76,7 @@ try {
 }
 ```
 
-To sign **an** `EosioTransactionSignatureRequest`, you should first create it with your serialized transaction and list of public keys. EOSIO SDK for Java **handle** the creation of the object for you.
+To sign an `EosioTransactionSignatureRequest`, you should first create it with your serialized transaction and list of public keys. EOSIO SDK for Java handles the creation of the object for you.
 Finally, call `signTransaction` to sign.
 
 ```java
@@ -95,7 +95,7 @@ try {
 * `signTransaction(EosioTransactionSignatureRequest eosioTransactionSignatureRequest)` signs an `Transaction`
 * `getAvailableKeys()` returns an array containing the public keys associated with the private keys that the object is initialized with.
 
-Importing a key by calling:
+Import a key by calling:
 
 * `importKey(String privateKey)`
 
