@@ -1,4 +1,2 @@
 include ':eosiojavasoftkeysignatureprovider'
 
-include 'eosiojava'
-project(':eosiojava').projectDir = new File('../eosio-java/eosiojava/')
