@@ -1,11 +1,11 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'com.jfrog.artifactory' version '4.9.5'
+    id 'maven-publish'
+
 }
 
 group 'one.block'
-version '0.1-alpha-SNAPSHOT'
-
-sourceCompatibility = 1.7
 
 repositories {
     mavenCentral()
@@ -26,4 +26,40 @@ dependencies {
 //Changes module cache control - Default is 24 hrs
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+}
+
+def libraryGroupId = 'one.block'
+def libraryArtifactId = 'eosiojavasoftkeysignatureprovider'
+def libraryVersion = '1.0.0'
+
+publishing {
+    publications {
+        jar(MavenPublication) {
+            from components.java
+            groupId libraryGroupId
+            version libraryVersion
+            artifactId libraryArtifactId
+
+            artifact("$buildDir/libs/${artifactId}.jar")
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactory_contextURL
+    publish {
+        repository {
+            repoKey = 'libs-release-local'
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+        defaults {
+            publications('jar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
 }
