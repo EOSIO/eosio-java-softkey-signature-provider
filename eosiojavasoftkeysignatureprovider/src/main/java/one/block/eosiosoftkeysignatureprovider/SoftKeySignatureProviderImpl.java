@@ -14,7 +14,7 @@ import one.block.eosiojava.models.signatureProvider.EosioTransactionSignatureRes
 import one.block.eosiojava.utilities.EOSFormatter;
 import one.block.eosiojava.utilities.PEMProcessor;
 import one.block.eosiosoftkeysignatureprovider.error.ImportKeyError;
-import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstant;
+import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstants;
 import org.bitcoinj.core.Sha256Hash;
 import org.bouncycastle.crypto.params.ECDomainParameters;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
@@ -29,22 +29,28 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This file is a placeholder until development starts.
+ * Example signature provider implementation for EOSIO-java SDK that signs transactions using
+ * an in-memory private key generated with the secp256r1 algorithm.  This implementation is NOT secure
+ * and should only be used for educational purposes.  It is NOT advisable to store private keys outside
+ * of secure devices like TEE's and SE's.
+ *
  */
 public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
     /**
-     * Keep a Set (Unique) of private key in PEM format
+     * Keep a Set (Unique) of private keys in PEM format
      */
     private Set<String> keys = new LinkedHashSet<>();
 
     /**
-     * Whether getAvailableKeys return WIF legacy format for K1 key
+     * Whether getAvailableKeys should return WIF legacy format for key generated with secp256k1
+     * algorithm.  This for of the key is prefaced with "EOS" instead of "PUB_K1_".
      */
     private boolean returnLegacyFormatForK1;
 
     /**
-     * Maximum re-try time should the signature provider try to create a canonical signature for K1 key
+     * Maximum number of times the signature provider should try to create a canonical signature
+     * for a secp256k1 generated key when the attempt fails.
      */
     private static final int MAX_NOT_CANONICAL_RE_SIGN = 100;
 
@@ -59,14 +65,15 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     private static final int S_INDEX = 1;
 
     /**
-     * Import private key into softkey signature provider
+     * Import private key into softkey signature provider.  Private key is stored in memory.
+     * NOT RECOMMENDED for production use!!!!
      *
      * @param privateKey - Eos format private key
      * @throws ImportKeyError
      */
     public void importKey(@NotNull String privateKey) throws ImportKeyError {
         if (privateKey.isEmpty()) {
-            throw new ImportKeyError(SoftKeySignatureErrorConstant.IMPORT_KEY_INPUT_EMPTY_ERROR);
+            throw new ImportKeyError(SoftKeySignatureErrorConstants.IMPORT_KEY_INPUT_EMPTY_ERROR);
         }
 
         String privateKeyPem;
@@ -74,11 +81,11 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         try {
             privateKeyPem = EOSFormatter.convertEOSPrivateKeyToPEMFormat(privateKey);
         } catch (EOSFormatterError eosFormatterError) {
-            throw new ImportKeyError(String.format(SoftKeySignatureErrorConstant.IMPORT_KEY_CONVERT_TO_PEM_ERROR, privateKey), eosFormatterError);
+            throw new ImportKeyError(String.format(SoftKeySignatureErrorConstants.IMPORT_KEY_CONVERT_TO_PEM_ERROR, privateKey), eosFormatterError);
         }
 
         if (privateKeyPem.isEmpty()) {
-            throw new ImportKeyError(SoftKeySignatureErrorConstant.IMPORT_KEY_CONVERT_TO_PEM_EMPTY_ERROR);
+            throw new ImportKeyError(SoftKeySignatureErrorConstants.IMPORT_KEY_CONVERT_TO_PEM_EMPTY_ERROR);
         }
 
         this.keys.add(privateKeyPem);
@@ -87,21 +94,21 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     @Override
     public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull EosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
         if (eosioTransactionSignatureRequest.getSigningPublicKey().isEmpty()) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_KEY_LIST);
+            throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_KEY_LIST);
         }
 
         if (eosioTransactionSignatureRequest.getChainId().isEmpty()) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_CHAIN_ID);
+            throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_CHAIN_ID);
         }
 
         if (eosioTransactionSignatureRequest.getSerializedTransaction().isEmpty()) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_TRANSACTION);
+            throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_TRANSACTION);
         }
 
-        // Getting serializedTransaction and prepare signable transaction
+        // Getting serializedTransaction and preparing signable transaction
         String serializedTransaction = eosioTransactionSignatureRequest.getSerializedTransaction();
 
-        // This is the un-hashed message which is used for recover public key
+        // This is the un-hashed message which is used to recover public key
         byte[] message;
 
         // This is the hashed message which is signed.
@@ -111,16 +118,16 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId()).toUpperCase());
             hashedMessage = Sha256Hash.hash(message);
         } catch (EOSFormatterError eosFormatterError) {
-            throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
+            throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
         }
 
         if (this.keys.isEmpty()) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_NO_KEY_AVAILABLE);
+            throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_NO_KEY_AVAILABLE);
         }
 
         List<String> signatures = new ArrayList<>();
 
-        // Getting public key and search for the corresponding private key
+        // Getting public key and searching for the corresponding private key
         for (String inputPublicKey : eosioTransactionSignatureRequest.getSigningPublicKey()) {
             BigInteger privateKeyBI = BigInteger.ZERO;
             AlgorithmEmployed curve = null;
@@ -142,13 +149,13 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                     }
                 }
             } catch (EosioError error) {
-                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_SEARCH_KEY_ERROR, inputPublicKey), error);
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_SEARCH_KEY_ERROR, inputPublicKey), error);
             }
 
             // Throw error if found no private key with input public key
             //noinspection ConstantConditions
             if (privateKeyBI.equals(BigInteger.ZERO) || curve == null) {
-                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_KEY_NOT_FOUND, inputPublicKey));
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_KEY_NOT_FOUND, inputPublicKey));
             }
 
             for (int i = 0; i < MAX_NOT_CANONICAL_RE_SIGN; i++) {
@@ -160,7 +167,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                 try {
                     domainParameters = PEMProcessor.getCurveDomainParameters(curve);
                 } catch (PEMProcessorError processorError) {
-                    throw new SignTransactionError(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
+                    throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_GET_CURVE_DOMAIN_ERROR, curve.getString()), processorError);
                 }
 
                 ECPrivateKeyParameters parameters = new ECPrivateKeyParameters(privateKeyBI, domainParameters);
@@ -179,7 +186,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                         continue;
                     }
 
-                    throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_FORMAT_SIGNATURE_ERROR, eosFormatterError);
+                    throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_FORMAT_SIGNATURE_ERROR, eosFormatterError);
                 }
             }
         }
@@ -200,15 +207,15 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                 availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(this.returnLegacyFormatForK1));
             }
         } catch (PEMProcessorError pemProcessorError) {
-            throw new GetAvailableKeysError(SoftKeySignatureErrorConstant.GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR, pemProcessorError);
+            throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR, pemProcessorError);
         }
 
         return availableKeys;
     }
 
     /**
-     * Whether getAvailableKeys return WIF legacy format for K1 key
-     *
+     * Whether getAvailableKeys should return WIF legacy format for key generated with secp256k1
+     * algorithm.  This for of the key is prefaced with "EOS" instead of "PUB_K1_".     *
      * @return Whether getAvailableKeys return WIF legacy format for K1 key
      */
     public boolean isReturnLegacyFormatForK1() {
@@ -216,7 +223,8 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     }
 
     /**
-     * Set returnLegacyFormatForK1 to true to get WIF Legacy format for K1 public key on getAvailableKey
+     * Set returnLegacyFormatForK1 to true to get WIF Legacy format for secp256k1 generated public
+     * key returned from method getAvailableKeys().
      *
      * @param returnLegacyFormatForK1 true for getting WIF Legacy format of K1 public key on getAvailableKey
      */
