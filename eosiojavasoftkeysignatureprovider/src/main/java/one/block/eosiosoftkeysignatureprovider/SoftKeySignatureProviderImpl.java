@@ -85,7 +85,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         }
 
         if (privateKeyPem.isEmpty()) {
-            throw new ImportKeyError(SoftKeySignatureErrorConstants.IMPORT_KEY_CONVERT_TO_PEM_EMPTY_ERROR);
+            throw new ImportKeyError(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR);
         }
 
         this.keys.add(privateKeyPem);
@@ -207,7 +207,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                 availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(this.returnLegacyFormatForK1));
             }
         } catch (PEMProcessorError pemProcessorError) {
-            throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR, pemProcessorError);
+            throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR, pemProcessorError);
         }
 
         return availableKeys;

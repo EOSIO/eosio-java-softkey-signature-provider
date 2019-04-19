@@ -17,11 +17,7 @@ public class SoftKeySignatureErrorConstants {
     /**
      * PEM conversion produced an empty string.
      */
-    public static final String IMPORT_KEY_CONVERT_TO_PEM_EMPTY_ERROR = "Converting to pem was success but pem result is empty.";
-    /**
-     *
-     */
-    public static final String GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR = "Converting to pem was success but pem result is empty!";
+    public static final String CONVERT_TO_PEM_EMPTY_ERROR = "Converting to pem was success but pem result is empty.";
     /**
      * The signable transaction preperation failed.  There may have been a problem with the
      * provided serialized transaction.
@@ -46,11 +42,12 @@ public class SoftKeySignatureErrorConstants {
     public static final String SIGN_TRANS_NO_KEY_AVAILABLE = "No key available in signature provider! Make sure to call import key.";
     /**
      * A public key is derived from the private key imported for signing.  The public keys needed to verify the transaction that come from
-     * the chain are compared to the derived public key.  If there is not a match this error message is thrown.
+     * the chain are compared to the derived public key.  If unexpected exception happens on the matching process, this error message is thrown.
      */
     public static final String SIGN_TRANS_SEARCH_KEY_ERROR = "Error when trying to search for corresponding private key from input public key %s";
     /**
-     *
+     * A public key is derived from the private key imported for signing.  The public keys needed to verify the transaction that come from
+     * the chain are compared to the derived public key.  If there is not a match this error message is thrown.
      */
     public static final String SIGN_TRANS_KEY_NOT_FOUND = "Found no corresponding private key with input public key %s";
     /**

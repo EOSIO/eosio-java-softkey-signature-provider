@@ -226,7 +226,7 @@ public class SoftKeySignatureProviderImplTest {
         String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
 
         exceptionRule.expect(GetAvailableKeysError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR);
         exceptionRule.expectCause(IsInstanceOf.<EosioError>instanceOf(PEMProcessorError.class));
 
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
