@@ -30,9 +30,9 @@ import java.util.Set;
 
 /**
  * Example signature provider implementation for EOSIO-java SDK that signs transactions using
- * an in-memory private key generated with the secp256r1 algorithm.  This implementation is NOT secure
- * and should only be used for educational purposes.  It is NOT advisable to store private keys outside
- * of secure devices like TEE's and SE's.
+ * an in-memory private key generated with the secp256r1, prime256v1, or secp256k1 algorithms.  This
+ * implementation is NOT secure and should only be used for educational purposes.  It is NOT
+ * advisable to store private keys outside of secure devices like TEE's and SE's.
  *
  */
 public class SoftKeySignatureProviderImpl implements ISignatureProvider {
@@ -69,7 +69,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
      * NOT RECOMMENDED for production use!!!!
      *
      * @param privateKey - Eos format private key
-     * @throws ImportKeyError
+     * @throws ImportKeyError Exception that occurs while trying to import a key
      */
     public void importKey(@NotNull String privateKey) throws ImportKeyError {
         if (privateKey.isEmpty()) {
