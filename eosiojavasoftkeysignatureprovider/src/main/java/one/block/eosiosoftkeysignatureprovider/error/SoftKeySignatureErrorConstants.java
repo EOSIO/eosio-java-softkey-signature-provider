@@ -42,7 +42,7 @@ public class SoftKeySignatureErrorConstants {
     public static final String SIGN_TRANS_NO_KEY_AVAILABLE = "No key available in signature provider! Make sure to call import key.";
     /**
      * A public key is derived from the private key imported for signing.  The public keys needed to verify the transaction that come from
-     * the chain are compared to the derived public key.  If unexpected exception happens on the matching process, this error message is thrown.
+     * the chain are compared to the derived public key.  If an unexpected exception happens during the matching process, this error message is thrown.
      */
     public static final String SIGN_TRANS_SEARCH_KEY_ERROR = "Error when trying to search for corresponding private key from input public key %s";
     /**
