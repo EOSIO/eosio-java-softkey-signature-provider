@@ -19,7 +19,7 @@ public class SoftKeySignatureErrorConstants {
      */
     public static final String CONVERT_TO_PEM_EMPTY_ERROR = "Converting to pem was success but pem result is empty.";
     /**
-     * The signable transaction preperation failed.  There may have been a problem with the
+     * The signable transaction preparation failed.  There may have been a problem with the
      * provided serialized transaction.
      */
     public static final String SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR = "Error when trying to prepare signable transaction from serialized transaction %s";
