@@ -15,7 +15,7 @@ repositories {
             username artifactory_username
             password artifactory_password
         }
-        url artifactory_contextURL
+        url artifactory_path_android_libraries
     }
 }
 
