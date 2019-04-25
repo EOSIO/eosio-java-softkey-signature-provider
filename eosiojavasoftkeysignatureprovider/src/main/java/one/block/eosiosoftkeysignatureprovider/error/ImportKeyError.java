@@ -4,7 +4,9 @@ import one.block.eosiojava.error.signatureProvider.SignatureProviderError;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Error would be thrown by SoftKeySignatureProviderImpl#ImportKeyError
+ * Error class is used when there is an exception while attempting to import a key into the
+ * signature provider.
+ *
  */
 public class ImportKeyError extends SignatureProviderError {
     public ImportKeyError() {

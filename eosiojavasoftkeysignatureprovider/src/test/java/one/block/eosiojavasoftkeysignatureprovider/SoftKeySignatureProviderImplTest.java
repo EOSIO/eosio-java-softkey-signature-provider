@@ -12,7 +12,7 @@ import one.block.eosiojava.models.signatureProvider.EosioTransactionSignatureRes
 import one.block.eosiojava.utilities.EOSFormatter;
 import one.block.eosiosoftkeysignatureprovider.SoftKeySignatureProviderImpl;
 import one.block.eosiosoftkeysignatureprovider.error.ImportKeyError;
-import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstant;
+import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstants;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
@@ -207,7 +207,7 @@ public class SoftKeySignatureProviderImplTest {
     @Test
     public void importKey_thenFailEmptyError() throws ImportKeyError {
         exceptionRule.expect(ImportKeyError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.IMPORT_KEY_INPUT_EMPTY_ERROR);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.IMPORT_KEY_INPUT_EMPTY_ERROR);
         new SoftKeySignatureProviderImpl().importKey("");
     }
 
@@ -215,7 +215,7 @@ public class SoftKeySignatureProviderImplTest {
     public void importKey_thenFailConvertToPemError() throws ImportKeyError {
         String invalidPrivateKey = "trash data";
         exceptionRule.expect(ImportKeyError.class);
-        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstant.IMPORT_KEY_CONVERT_TO_PEM_ERROR, invalidPrivateKey));
+        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstants.IMPORT_KEY_CONVERT_TO_PEM_ERROR, invalidPrivateKey));
         exceptionRule.expectCause(IsInstanceOf.<EosioError>instanceOf(EOSFormatterError.class));
 
         new SoftKeySignatureProviderImpl().importKey(invalidPrivateKey);
@@ -226,7 +226,7 @@ public class SoftKeySignatureProviderImplTest {
         String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
 
         exceptionRule.expect(GetAvailableKeysError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.GET_AVAILABLE_KEY_CONVERT_FROM_PEM_TO_EOS_ERROR);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR);
         exceptionRule.expectCause(IsInstanceOf.<EosioError>instanceOf(PEMProcessorError.class));
 
         SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
@@ -251,7 +251,7 @@ public class SoftKeySignatureProviderImplTest {
     @Test
     public void signTransactionTest_thenFailEmptyPublicKey() throws SignTransactionError {
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_KEY_LIST);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_KEY_LIST);
 
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
@@ -273,7 +273,7 @@ public class SoftKeySignatureProviderImplTest {
     @Test
     public void signTransactionTest_thenFailWithEmptyChainId() throws SignTransactionError {
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_CHAIN_ID);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_CHAIN_ID);
 
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
@@ -297,7 +297,7 @@ public class SoftKeySignatureProviderImplTest {
     @Test
     public void signTransactionTest_thenFailWithEmptySerializedTransaction() throws SignTransactionError {
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_TRANSACTION);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_TRANSACTION);
 
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
@@ -322,7 +322,7 @@ public class SoftKeySignatureProviderImplTest {
     public void signTransactionTest_thenFailWithPrepareSignableTransaction() throws SignTransactionError {
         String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction));
+        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction));
         exceptionRule.expectCause(IsInstanceOf.<EosioError>instanceOf(EOSFormatterError.class));
 
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
@@ -353,7 +353,7 @@ public class SoftKeySignatureProviderImplTest {
     @Test
     public void signTransactionTest_thenFailNoKeyAvailable() throws SignTransactionError {
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(SoftKeySignatureErrorConstant.SIGN_TRANS_NO_KEY_AVAILABLE);
+        exceptionRule.expectMessage(SoftKeySignatureErrorConstants.SIGN_TRANS_NO_KEY_AVAILABLE);
 
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
@@ -371,7 +371,7 @@ public class SoftKeySignatureProviderImplTest {
         String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
 
         exceptionRule.expect(SignTransactionError.class);
-        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstant.SIGN_TRANS_KEY_NOT_FOUND, publicKeyR1EOS));
+        exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_KEY_NOT_FOUND, publicKeyR1EOS));
 
         String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
 
