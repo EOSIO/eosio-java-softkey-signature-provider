@@ -86,7 +86,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
     @Override
     public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull EosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
-        if (eosioTransactionSignatureRequest.getSigningPublicKey().isEmpty()) {
+        if (eosioTransactionSignatureRequest.getSigningPublicKeys().isEmpty()) {
             throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_KEY_LIST);
         }
 
@@ -121,7 +121,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         List<String> signatures = new ArrayList<>();
 
         // Getting public key and search for the corresponding private key
-        for (String inputPublicKey : eosioTransactionSignatureRequest.getSigningPublicKey()) {
+        for (String inputPublicKey : eosioTransactionSignatureRequest.getSigningPublicKeys()) {
             BigInteger privateKeyBI = BigInteger.ZERO;
             AlgorithmEmployed curve = null;
 
