@@ -95,7 +95,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull EosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
 
         if (eosioTransactionSignatureRequest.getSigningPublicKeys().isEmpty()) {
-            throw new SignTransactionError(SoftKeySignatureErrorConstant.SIGN_TRANS_EMPTY_KEY_LIST);
+            throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_KEY_LIST);
 
         }
 
