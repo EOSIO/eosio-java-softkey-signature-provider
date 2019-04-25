@@ -1,21 +1,94 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'com.jfrog.artifactory' version '4.9.5'
+    id 'maven-publish'
+
 }
 
 group 'one.block'
-version '0.1-alpha-SNAPSHOT'
-
-sourceCompatibility = 1.7
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
+    maven {
+        credentials{
+            username artifactory_username
+            password artifactory_password
+        }
+        url artifactory_path_android_libraries
+    }
 }
 
 dependencies {
-    implementation files('libs/eosiojava.jar')
+    implementation 'one.block:eosiojava:1.0.0'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'org.mockito:mockito-core:2.26.0'
     testCompile 'org.powermock:powermock-module-junit4:2.0.0'
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
+}
+
+//Changes module cache control - Default is 24 hrs
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+}
+
+def libraryGroupId = 'one.block'
+def libraryArtifactId = 'eosiojavasoftkeysignatureprovider'
+def libraryVersion = '1.0.0'
+
+task sourcesJar(type: Jar, dependsOn: classes){
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+javadoc.failOnError = false
+task javadocJar(type: Jar, dependsOn: javadoc){
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        jar(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
+            groupId libraryGroupId
+            version libraryVersion
+            artifactId libraryArtifactId
+
+            artifact("$buildDir/libs/${artifactId}.jar")
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactory_contextURL
+    publish {
+        repository {
+            repoKey = artifactory_repo
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+        defaults {
+            publications('jar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
 }
