@@ -1,13 +1,13 @@
 steps:
 
-  - command:
+  - command:  |
       bash .scripts/artifactory.sh
       gradle assemble artifactoryPublish
     label: "Build Library"
     agents:
       - "queue=automation-android-builder-fleet"
 
-  - command:
+  - command:  |
       bash .scripts/artifactory.sh
       gradle test
     label: "Run Tests"
