@@ -13,3 +13,4 @@ echo "artifactory_password=$(cat /var/lib/buildkite-agent/.artifactory-password)
 #echo "artifactory_password=testest" >> $GRADLE_PROPERTIES
 echo "artifactory_contextURL=https://blockone.jfrog.io/blockone" >> $GRADLE_PROPERTIES
 echo "artifactory_repo=android-libs-dev" >> $GRADLE_PROPERTIES
+echo "artifactory_path_android_libraries=android-libs" >> $GRADLE_PROPERTIES
