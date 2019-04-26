@@ -45,8 +45,8 @@ To use Softkey Signature Provider with EOSIO SDK for Java in your app, add the f
 **TODO** This needs to be updated when the distribution strategy is finalized.
 
 ```java
-implementation 'one.block:eosio-java:0.1-alpha'
-implementation 'one.block:eosio-java-softkey-signature-provider:0.1-alpha'
+implementation 'one.block:eosiojava:0.0.1'
+implementation 'one.block:eosiojavasoftkeysignatureprovider:0.0.1'
 ```
 
 If you are using Softkey Signature Provider, or any library that depends on it, in an Android application you must also add the following to your application's `build.gradle` file in the `android` section:
