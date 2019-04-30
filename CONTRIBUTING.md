@@ -6,7 +6,7 @@ Interested in contributing? That's awesome! Here are some guidelines to get star
   - [Bug Reports](#bug-reports)
   - [Feature Requests](#feature-requests)
   - [Change Requests](#change-requests)
-- [Working on Softkey Signature Provider](#working-on-eosio-softkey-signature-provider)
+- [Working on Softkey Signature Provider](#working-on-softkey-signature-provider)
   - [Feature Branches](#feature-branches)
   - [Developing With Gradle Locally](#developing-with-gradle-locally)
   - [Submitting Pull Requests](#submitting-pull-requests)
@@ -77,7 +77,7 @@ To get it out of the way:
 By default, libraries are installed from remote Maven repositories through Gradle. If, however, you wish to develop locally and you'd like to integrate with locally-cloned versions of EOSIO SDK for Java and/or other Providers, follow these instructions:
 
 1. Clone this and other repos into the same directory, as siblings of one another.
-1. Github repo of all libraries: 
+1. Github repo of all libraries:
    * [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java): The core EOSIO SDK for Java library
    * [RPC Provider](https://github.com/EOSIO/eosio-java-android-rpc-provider): The RPC provider implementation in the core library
    * [ABIEOS Serialization Provider](https://github.com/EOSIO/eosio-java-android-abieos-serialization-provider): A pluggable serialization provider for EOSIO SDK for Java using ABIEOS (for transaction and action conversion between JSON and binary data representations)
@@ -93,11 +93,11 @@ Pull requests are awesome. If you're looking to raise a PR for something which d
 
 Never underestimate just how useful quality assurance is. If you're looking to get involved with the code base and don't know where to start, checking out and testing a pull request is one of the most useful things you could do.
 
-Essentially, [check out the latest develop branch](#working-on-eosio-sdk-for-java-soft-key-signature-provider), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
+Essentially, [check out the latest develop branch](#working-on-softkey-signature-provider), take it for a spin, and if you find anything odd, please follow the [bug report guidelines](#bug-reports) and let us know!
 
 ### Code Style and Linting
 
-Softkey Signature Provider leverages [SonarLint](https://www.sonarlint.org/) for linting and the [Google Java Style Guide](https://github.com/google/styleguide) with tab size and indent set to 4, and continuation indent set to 8 for code format flagging. Once SonarLint is installed, linting warnings and errors will be flagged inline with squiggles.  Automatic code formatting can be accomplished by downloading and importing the Google Java Style settings into your IDE.
+Softkey Signature Provider leverages [SonarLint](https://www.sonarlint.org/) for linting and the [Google Java Style Guide](https://github.com/google/styleguide) with tab size and indent set to 4, and continuation indent set to 8 for code format flagging. Once SonarLint is installed, linting warnings and errors will be flagged inline with squiggles. Automatic code formatting can be accomplished by downloading and importing the Google Java Style settings into your IDE.
 
 Please be sure to resolve any linting issues introduced by your contributions prior to requesting a review on your PR.
 
