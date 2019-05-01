@@ -1,5 +1,6 @@
 ![Java Logo](img/java-logo.png)
 # EOSIO SDK for Java: Softkey Signature Provider ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
+
 [![Software License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/EOSIO/eosio-java-softkey-signature-provider/blob/master/LICENSE)
 ![Language Java](https://img.shields.io/badge/Language-Java-yellow.svg)
 ![](https://img.shields.io/badge/Deployment%20Target-JVM-blue.svg)
@@ -63,7 +64,8 @@ Then refresh your gradle project. Then you're all set for the [Basic Usage](#bas
 
 ## Basic Usage
 
-Generally, signature providers are called by [TransactionProcessor](https://github.com/EOSIO/eosio-java/blob/master/eosiojava/src/main/java/one/block/eosiojava/session/TransactionProcessor.java) during signing. (See an [example here](https://github.com/EOSIO/eosio-java#basic-usage).) If you find, however, that you need to get available keys or request signing directly, this library can be invoked as follows:
+Generally, signature providers are called by the [TransactionProcessor](https://github.com/EOSIO/eosio-java/blob/master/eosiojava/src/main/java/one/block/eosiojava/session/TransactionProcessor.java) during signing. (See an [example here](https://github.com/EOSIO/eosio-java#basic-usage).) If you find, however, that you need to get available keys or request signing directly, this library can be invoked as follows:
+
 ```java
 SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
 try {
@@ -73,7 +75,7 @@ try {
 }
 ```
 
-and to import a private key:
+And to import a private key:
 
 ```java
 try {
@@ -84,6 +86,7 @@ try {
 ```
 
 To sign an `EosioTransactionSignatureRequest`, you should first create it with your serialized transaction and list of public keys. EOSIO SDK for Java handles the creation of the object for you.
+
 Finally, call `signTransaction` to sign.
 
 ```java
@@ -99,14 +102,14 @@ try {
 
 ## Android Example App
 
-If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app) --a working application that fetches an account's token balance and pushes a transfer action.
+If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app)--a working application that fetches an account's token balance and pushes a transfer action.
 
 ## Library Methods
 
 This library is an example implementation of [ISignatureProvider](https://github.com/EOSIO/eosio-java/blob/master/eosiojava/src/main/java/one/block/eosiojava/interfaces/ISignatureProvider.java). It implements the following protocol methods:
 
-* `signTransaction(EosioTransactionSignatureRequest eosioTransactionSignatureRequest)` signs an `Transaction`
-* `getAvailableKeys()` returns an array containing the public keys associated with the private keys that the object is initialized with.
+* `signTransaction(EosioTransactionSignatureRequest eosioTransactionSignatureRequest)` signs a `Transaction`
+* `getAvailableKeys()` returns an array containing the public keys associated with the private keys that the object is initialized with
 
 Import a key by calling:
 
