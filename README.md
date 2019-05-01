@@ -4,7 +4,7 @@
 ![Language Java](https://img.shields.io/badge/Language-Java-yellow.svg)
 ![](https://img.shields.io/badge/Deployment%20Target-JVM-blue.svg)
 
-Softkey Signature Provider is an example pluggable signature provider for [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java). It allows for signing transactions using in-memory K1 and R1 keys.
+Softkey Signature Provider is an example pluggable signature provider for [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java). It allows for signing transactions using in-memory SECP256K1 and SECP256R1 keys.
 
 **Important:** Softkey Signature Provider stores keys in memory and is therefore not secure. It should only be used for development purposes. In production, we strongly recommend using a signature provider that interfaces with a KeyStore, authenticator or wallet.
 
@@ -77,7 +77,7 @@ and to import a private key:
 
 ```java
 try {
-  provider.importKey("Your eos format private key in K1 or R1 type");
+  provider.importKey("Your eos format private key in SECP256K1 or SECP256R1 type");
 } catch (ImportKeyError importKeyError) {
   importKeyError.printStackTrace();
 }
@@ -89,7 +89,7 @@ Finally, call `signTransaction` to sign.
 ```java
 try {
   String serializedTransaction = "Your serialized transaction";
-  List<String> publicKeys = Arrays.asList("Your eos format public key in K1 or R1 type");
+  List<String> publicKeys = Arrays.asList("Your eos format public key in SECP256K1 or SECP256R1 type");
   EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
   EosioTransactionSignatureResponse response = provider.signTransaction(request);
 } catch (SignTransactionError signTransactionError) {
