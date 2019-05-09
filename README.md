@@ -38,6 +38,8 @@ All signature providers must conform to the [ISignatureProvider](https://github.
 * Java JDK 1.8+ (1.7 source compatibility is targeted)
 * Gradle 4.10.1+
 
+Since EOSIO SDK for Java: Softkey Signature Provider is not an Android specific project, we recommend using IntelliJ if you are going to work on it.  You can use Android Studio but be aware that some of the menu options under Build like `Rebuild Project` and `Clean Project` will not work correctly.  You may still compile within Android Studio using `Make Project` under the Build menu, or by using Gradle from the command line.
+
 ## Installation
 
 This provider is intended to be used in conjunction with [EOSIO SDK for Java](https://github.com/EOSIO/eosio-java) as a provider plugin.
