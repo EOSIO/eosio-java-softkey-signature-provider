@@ -27,7 +27,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
 }
 
-//Changes module cache control - Default is 24 hrs
+//Changes module cache control --- Default is 24 hrs
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
 }
