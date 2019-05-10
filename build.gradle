@@ -7,7 +7,6 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
         maven {
             credentials{
                 username artifactory_username
@@ -16,5 +15,6 @@ allprojects {
             url artifactory_path_android_libraries
         }
         jcenter()
+        mavenCentral()
     }
 }
