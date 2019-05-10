@@ -8,14 +8,14 @@ plugins {
 group 'one.block'
 
 repositories {
-    jcenter()
-    mavenCentral()
     maven {
         credentials{
             username artifactory_username
             password artifactory_password
         }
         url artifactory_path_android_libraries
+        jcenter()
+        mavenCentral()
     }
 }
 
@@ -27,9 +27,9 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
 }
 
-//Changes module cache control - Default is 24 hrs
+//Changes module cache control ---- Default is 24 hrs
 configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+    resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
 }
 
 def libraryGroupId = 'one.block'
