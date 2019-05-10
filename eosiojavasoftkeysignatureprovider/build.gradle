@@ -8,6 +8,7 @@ plugins {
 group 'one.block'
 
 repositories {
+    mavenCentral()
     maven {
         credentials{
             username artifactory_username
@@ -16,7 +17,6 @@ repositories {
         url artifactory_path_android_libraries
     }
     jcenter()
-    mavenCentral()
 }
 
 dependencies {
