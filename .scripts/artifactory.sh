@@ -32,7 +32,7 @@ else
 fi
 
 
-GRADLE_PROPERTIES="/var/lib/buildkite-agent/builds/automation-android-builder-fleet/EOSIO/eosio-java-softkey-signature-provider/eosiojavasoftkeysignatureprovider/gradle.properties"
+GRADLE_PROPERTIES="/var/lib/buildkite-agent/builds/automation-android-builder-fleet/EOSIO/eosio-java-softkey-signature-provider/gradle.properties"
 export GRADLE_PROPERTIES
 echo "Gradle Properties should exist at $GRADLE_PROPERTIES"
 echo "Gradle Properties does not exist"
