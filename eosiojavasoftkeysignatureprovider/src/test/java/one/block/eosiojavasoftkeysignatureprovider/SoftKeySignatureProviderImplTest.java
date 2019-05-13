@@ -164,6 +164,88 @@ public class SoftKeySignatureProviderImplTest {
     }
 
     @Test
+    public void signTransactionTestMultipleKeys() {
+        // R1 key test
+        List<String[]> keyPairs = new ArrayList<>();
+        keyPairs.add(new String[] {"PVT_R1_27XFnmZj3gYEeeSy4fy5PoqoP63n94nhTAyFMcuJGAV9b5cqyC", "PUB_R1_5AvUuRssyb7Z2HgNHVofX5heUV5dk8Gni1BGNMzMRCGbhdhBbu"});
+        keyPairs.add(new String[] {"PVT_R1_GrfEfbv5at9kbeHcGagQmvbFLdm6jqEpgE1wsGbrfbZNjpVgT", "PUB_R1_4ztaVy8L9zbmzTdpfq5GcaFYwGwXTNmN3qW7qcgHMmfUZhpzQQ"});
+        keyPairs.add(new String[] {"PVT_R1_wCpPsaY9o8NU9ZsuwaYVQUDkCfj1aWJZGVcmMM6XyYHJVqvqp", "PUB_R1_5xawnnr3mWayv2wkiqBGWqu4RQLNJffLSXHiL3BofdY7ortMy4"});
+        keyPairs.add(new String[] {"PVT_R1_2sXhBwN8hCLSWRxxfZg6hqwGymKSudtQ7Qa5wUWyuW54E1Gd7P", "PUB_R1_6UYnNnXv2CutCtTLgCQxJbHBeWDG3JZaSQJK9tQ7K3JUdzXw9p"});
+        keyPairs.add(new String[] {"PVT_R1_2fJmPgaik4rUeU1NDchQjnSPkQkga4iKzdK5hhdbKf2PQFJ57t", "PUB_R1_5MVdX3uzs6qDHUYpdSksZFc5rAu5P4ba6MDaySuYyzQqmCw96Q"});
+        keyPairs.add(new String[] {"PVT_R1_2FBMJryipxmAeiwFYXvBTRhX1y5tdepDYBjCm4VqBWcsmdy1xD", "PUB_R1_5qjeAbU6mUM4PLRQBw8V4kxuc5pAjnJFpcMrdZmHF6L6uH57dk"});
+        keyPairs.add(new String[] {"PVT_R1_2tjkXAnQPi5Jte8H5SihUQDRnJDPTny5hoiWxxeKm7uC1osiet", "PUB_R1_5BpFt4f1PXzvU2SVmwZdtCiFWbwDRHPzh8Fiao8PCd1R17pH5S"});
+        keyPairs.add(new String[] {"PVT_R1_onDM2GMv8D9E7tXuZtGtyEGdLr5TWBuE6weLBwB9hC3NNao6", "PUB_R1_85V3FDScTPvPKhQLQMhrqrQE4xnrqWbZVor5B2LC1qwuJaL15p"});
+        keyPairs.add(new String[] {"PVT_R1_jW6MUBQWWmy8Zj1nhtGuMSZaPMH2FXwyJYBkJKndPBRCFPAiH", "PUB_R1_8H8Gwa6rwETdZsKWV6r8Ec9MCa4eVU6PKjDWxShB4EjxRtw5mb"});
+        keyPairs.add(new String[] {"PVT_R1_2fX6RwwREC8mVCvX31C5ivCsVAGbQ4waX3wEmiRQoamsGQm2cV", "PUB_R1_5tTLGveJ7TndwDEk8mbw6wEYxNoRmUSrSLjqRdahZWmF1r93QP"});
+        keyPairs.add(new String[] {"PVT_R1_2bmerckTyLpK5Z9gaoAHbHWhRBHEC3b8uxdqnFciK9tgx7RnL1", "PUB_R1_84ra3upayTtazvWHJQUgfcJ6hTKYtyUJfckx8qXeRi2kRoxbSJ"});
+        keyPairs.add(new String[] {"PVT_R1_2i3AZiJEQxUejHL5c8TheCXdB4yuRacJkVkdR5PxLqDwcax6mT", "PUB_R1_8V7dPunExH1bWnD88gduac71tbjW1CSPuaaUVhJwZG6yF544xE"});
+        keyPairs.add(new String[] {"PVT_R1_2HXMYeSqWGqPhUbK8FLzfxJzMV9dPT7ZXFJi9Q2DLkSN1dNwzp", "PUB_R1_7QKfB2nBJJPsUDoBBJVRYV9ak1egBH6dDDGPgvT83zUs1AvQfU"});
+
+        for (String[] keyPair : keyPairs) {
+            this.signTransactionTestWithArgs(keyPair[0], keyPair[1], false);
+        }
+
+        // K1 test in WIF test
+        keyPairs = new ArrayList<>();
+        keyPairs.add(new String[] {"5KaUJmXMVc2FF1XMRAjCxmh5or2w6awq4SaGft7HfApJLGDroFd", "EOS5aYo7EthRA5XPG72ekWdbkjYPkk8o7ufLdDzoaj8QR9oshZAXW"});
+        keyPairs.add(new String[] {"5KaqhmASMEa6NeV6shfhq8AuYQa5r3xrxWvXB4SiSHwxaQeN2m6", "EOS65d2eTiu7TTdJrQ75JXdMxH657zBiT1Mqz4KhX3eyQAgQtpgf1"});
+        keyPairs.add(new String[] {"5K1GuwAFjjvFJsiQu2NHYoWWCV16xAxZ1LgUKw8WrF3T5Tg4556", "EOS8K6Jq3CFSgk3zBNAAsvY7a5p4vzyfxDQDprTwzQnUXnLEZBZAt"});
+        keyPairs.add(new String[] {"5KRdi3aCwQWSmX4nqNRbhYe6LLJz3xcxvEcWX141qarZGKqKKXQ", "EOS7ABgtG3CDJEPFfxqbvgLy77pxi2Ai3QJtQvrdhnduxEjjNzKVz"});
+        keyPairs.add(new String[] {"5KdTC3SHPDC3orkhvrDbDGvnT2NzR5kexkCnu5RkNbv9vaujSfp", "EOS6pr3Mz91u1Yv3Tkt7T7oqrT4w5nCmSuZCoPHwJCwGipoqaHBQ8"});
+        keyPairs.add(new String[] {"5K4VhWHSUJnwTaBhEx8LTECS4DewzRnizb2micRHfwwtnWmSMVx", "EOS8ajgEKL7eba36WpAhAiWp9jWxkP7ySzReFPVLkV7vNXKK6WhqA"});
+        keyPairs.add(new String[] {"5KFjmNrL2cx2SysfMhdFzGH9F7ERVfc85TogKeF55jS18VErhiA", "EOS7z5Co6Ynggq2ygsLWrn8sQ7kDvYiBTs5mFxWN8HvcxB35wyXUN"});
+
+        for (String[] keyPair : keyPairs) {
+            this.signTransactionTestWithArgs(keyPair[0], keyPair[1], true);
+        }
+
+        // K1 in new format test
+        keyPairs = new ArrayList<>();
+        keyPairs.add(new String[] {"5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU", "PUB_K1_8CbY5PhQZGF2gzPKRBaNG4YzB4AwpmfnDcVZMSPZTqQMn1uFhB"});
+        keyPairs.add(new String[] {"5KW9dCerdNkGKa5Eis3tqmomFaK3FSwGyzShcFHFCxhSg3cYcda", "PUB_K1_6Lqa1KEfyCtMkf4aTUKsiFiRQ2QsfV6s7MrNe4AHL3xqtMYboc"});
+        keyPairs.add(new String[] {"5JfxDRNHhbG9buaYWM9BT2taCckeQo7CzCxBoCrm2GmGSzUegXJ", "PUB_K1_4zLmUratR7P1Bm8ofu1QywPYn9hYTdE4xK5J23n3kwA8jYyqnq"});
+        keyPairs.add(new String[] {"5JvqRMk6P7vHoScC3TKzEFBRYGdk1bej6pGGaToEjs9oaZUXm1a", "PUB_K1_5CfaiaeiyWWFXBYnAuYQXfLoTWxsxmycdG7gShvJoQCLRcGTqE"});
+        keyPairs.add(new String[] {"5JNMHnmTzKJTDHT5a7JCVU7TRz7As3GdeFdwgWRRgPBNW2buSLY", "PUB_K1_5RGwHXDwKugv8GZEFR1enxNEsoEKGGChwPUtEcEKKQbFmr5jgF"});
+        keyPairs.add(new String[] {"5J49cDDhbnwprVysd93yoogQXLh3Q37ge6iJPynjqHbzm9nozGy", "PUB_K1_8SpQXDt2ULK4v3Yx2u7qUp6zNaNT1gRwnrU5AJhM67Lk25tom8"});
+        keyPairs.add(new String[] {"5KXUHV94KCG2evdGQ1cNpUJ6PigS99mJBv2mvKNcjxQvXEee3c1", "PUB_K1_7BtR7o48FqfHhXgWtxifXGUPrg94HDHFPgTtgVG1vCA8KaxVgt"});
+        keyPairs.add(new String[] {"5K3otXd2RRQTZao5CYQXo2nHu2rC4VRN6LYQwyShxcfwNtsSgLo", "PUB_K1_8mNC41aAcXmZeoMZcRW6DUNSxs7AfZdfLnQ5WMbLPuzKPrk3wL"});
+        keyPairs.add(new String[] {"5JNtXpnqYQ1Fe3y7S3D7eVetprBuuf8Xzo89roo1QMPTB24kHkm", "PUB_K1_7FopBLaVh1uUQJ7qxFGCZgMttsBJKhXM9hbpFp83gmrUxYJLLE"});
+        keyPairs.add(new String[] {"5JM4fskPtJSwCqSb8Ax6vSYYRr7HwyrpnBxwfG3qr5mUFpMwgkA", "PUB_K1_77DjPHQtPRwXZKDtVvV93PsytUgevbqdPQcZpdPt2MwR541nX2"});
+        keyPairs.add(new String[] {"5K8EvWwTbQj7anhLWfr1K1mSMi78CD8YqHquei1gntJDStV8Zdh", "PUB_K1_8B89xwYNkcEEcwyC66LPptRAspCZ7SXy59BqsyoFeNyyq1sKfc"});
+        keyPairs.add(new String[] {"5J5DhKFZZqkNkTunWWbgrJNLDwZiK1vJk8Rd8nNL2fKPzLScn1x", "PUB_K1_58aKDkGmkHfswooj8nwhtrc42QrHVzUurnrhDR4Jr1rEk5uXRs"});
+
+        for (String[] keyPair : keyPairs) {
+            this.signTransactionTestWithArgs(keyPair[0], keyPair[1], false);
+        }
+    }
+
+    private void signTransactionTestWithArgs(String privateKey, String publicKey, boolean isLegacy) {
+        String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
+        List<String> publicKeys = Collections.singletonList(publicKey);
+        String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
+        EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false);
+        SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
+        provider.setReturnLegacyFormatForK1(isLegacy);
+        try {
+            provider.importKey(privateKey);
+        } catch (ImportKeyError importKeyError) {
+            importKeyError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+
+        try {
+            EosioTransactionSignatureResponse response = provider.signTransaction(request);
+            assertNotNull(response);
+            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(1, request.getSigningPublicKeys().size());
+            assertTrue(response.getSignatures().get(0).contains("SIG_"));
+        } catch (SignTransactionError signTransactionError) {
+            signTransactionError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+    }
+
+    @Test
     public void signTransactionWithMultipleKeyExpectMultiSignatures() {
         String privateKeyK1EOS = "5JKVeYzRs42DpnHU1rUeJHPZyXb1pCdhyayx7FD2qKHV63F71zU";
         String publicKeyK1EOS = "PUB_K1_8CbY5PhQZGF2gzPKRBaNG4YzB4AwpmfnDcVZMSPZTqQMn1uFhB";
