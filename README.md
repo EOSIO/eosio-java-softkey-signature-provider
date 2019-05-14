@@ -104,7 +104,7 @@ try {
 
 ## Android Example App
 
-If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app)--a working application that fetches an account's token balance and pushes a transfer action.
+If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app)-a working application that fetches an account's token balance and pushes a transfer action.
 
 ## Library Methods
 
