@@ -65,6 +65,11 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     private static final int S_INDEX = 1;
 
     /**
+     * Signum to convert a negative value to a positive Big Integer
+     */
+    private static final int BIG_INTEGER_POSITIVE = 1;
+
+    /**
      * Import private key into softkey signature provider.  Private key is stored in memory.
      * NOT RECOMMENDED for production use!!!!
      *
@@ -146,7 +151,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                     String inputPublicKeyPEM = EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey);
 
                     if (innerPublicKeyPEM.equals(inputPublicKeyPEM)) {
-                        privateKeyBI = new BigInteger(availableKeyProcessor.getKeyData());
+                        privateKeyBI = new BigInteger(BIG_INTEGER_POSITIVE, availableKeyProcessor.getKeyData());
                         curve = availableKeyProcessor.getAlgorithm();
                         break;
                     }
