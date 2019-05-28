@@ -63,10 +63,19 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
     private static final int BIG_INTEGER_POSITIVE = 1;
 
     /**
-     * Place holder for Whether getAvailableKeys should return WIF legacy format for key generated with secp256k1
-     * algorithm.  This for of the key is prefaced with "EOS" instead of "PUB_K1_".
+     * Flag to indicate getAvailableKeys() should return keys generated with the secp256k1 algorithm in the legacy (prefaced with "EOS")
      */
-    private static final boolean DEFAULT_WHETHER_USING_K1_LEGACY_FORMAT = false;
+    private static final boolean USING_K1_LEGACY_FORMAT = true;
+
+    /**
+     * Flag to indicate getAvailableKeys() should return keys generated with the secp256k1 algorithm in the new (prefaced with "PUB_K1_") formats
+     */
+    private static final boolean USING_K1_NON_LEGACY_FORMAT = false;
+
+    /**
+     * Flag to indicate whether getAvailableKeys() should return keys generated with the secp256k1 algorithm in the legacy (prefaced with "EOS") or new (prefaced with "PUB_K1_") formats.
+     */
+    private static final boolean DEFAULT_WHETHER_USING_K1_LEGACY_FORMAT = USING_K1_NON_LEGACY_FORMAT;
 
     /**
      * Import private key into softkey signature provider.  Private key is stored in memory.
@@ -224,14 +233,15 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
                 switch (curve) {
                     case SECP256R1:
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(false));
+                        // USING_K1_NON_LEGACY_FORMAT is being used here because its value does not matter to SECP256R1 key
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
                         break;
 
                     case SECP256K1:
                         // Non legacy
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(false));
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
                         // legacy
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(true));
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_LEGACY_FORMAT));
                         break;
 
                     default:
