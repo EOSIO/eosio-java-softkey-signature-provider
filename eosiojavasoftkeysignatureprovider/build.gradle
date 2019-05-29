@@ -34,7 +34,7 @@ configurations.all {
 
 def libraryGroupId = 'one.block'
 def libraryArtifactId = 'eosiojavasoftkeysignatureprovider'
-def libraryVersion = '0.1.0'
+def libraryVersion = '0.1.1'
 
 task sourcesJar(type: Jar, dependsOn: classes){
     classifier = 'sources'
