@@ -33,7 +33,6 @@ import java.util.Set;
  * an in-memory private key generated with the secp256r1, prime256v1, or secp256k1 algorithms.  This
  * implementation is NOT secure and should only be used for educational purposes.  It is NOT
  * advisable to store private keys outside of secure devices like TEE's and SE's.
- *
  */
 public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
@@ -41,12 +40,6 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
      * Keep a Set (Unique) of private keys in PEM format
      */
     private Set<String> keys = new LinkedHashSet<>();
-
-    /**
-     * Whether getAvailableKeys should return WIF legacy format for key generated with secp256k1
-     * algorithm.  This for of the key is prefaced with "EOS" instead of "PUB_K1_".
-     */
-    private boolean returnLegacyFormatForK1;
 
     /**
      * Maximum number of times the signature provider should try to create a canonical signature
@@ -68,6 +61,21 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
      * Signum to convert a negative value to a positive Big Integer
      */
     private static final int BIG_INTEGER_POSITIVE = 1;
+
+    /**
+     * Flag to indicate getAvailableKeys() should return keys generated with the secp256k1 algorithm in the legacy (prefaced with "EOS")
+     */
+    private static final boolean USING_K1_LEGACY_FORMAT = true;
+
+    /**
+     * Flag to indicate getAvailableKeys() should return keys generated with the secp256k1 algorithm in the new (prefaced with "PUB_K1_") formats
+     */
+    private static final boolean USING_K1_NON_LEGACY_FORMAT = false;
+
+    /**
+     * Flag to indicate whether getAvailableKeys() should return keys generated with the secp256k1 algorithm in the legacy (prefaced with "EOS") or new (prefaced with "PUB_K1_") formats.
+     */
+    private static final boolean DEFAULT_WHETHER_USING_K1_LEGACY_FORMAT = USING_K1_NON_LEGACY_FORMAT;
 
     /**
      * Import private key into softkey signature provider.  Private key is stored in memory.
@@ -145,7 +153,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                 for (String key : keys) {
                     PEMProcessor availableKeyProcessor = new PEMProcessor(key);
                     //Extract public key in PEM format from inner private key
-                    String innerPublicKeyPEM = availableKeyProcessor.extractPEMPublicKeyFromPrivateKey(this.returnLegacyFormatForK1);
+                    String innerPublicKeyPEM = availableKeyProcessor.extractPEMPublicKeyFromPrivateKey(DEFAULT_WHETHER_USING_K1_LEGACY_FORMAT);
 
                     // Convert input public key to PEM format for comparision
                     String inputPublicKeyPEM = EOSFormatter.convertEOSPublicKeyToPEMFormat(inputPublicKey);
@@ -187,7 +195,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
                     // Format Signature
                     signatures.add(signature);
                     break;
-                }  catch (EOSFormatterError eosFormatterError) {
+                } catch (EOSFormatterError eosFormatterError) {
                     // In theory, Non-canonical error only happened with K1 key
                     if (eosFormatterError.getCause() instanceof EosFormatterSignatureIsNotCanonicalError && curve == AlgorithmEmployed.SECP256K1) {
                         // Try to sign again until MAX_NOT_CANONICAL_RE_SIGN is reached or get a canonical signature
@@ -202,6 +210,15 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
     }
 
+    /**
+     * Gets available keys from signature provider <br> Check createSignatureRequest() flow in
+     * "complete workflow" for more detail of how the method is used.
+     * <p>
+     * Public key of SECP256K1 has 2 types of format in EOSIO which are "EOS" and "PUB_K1_" so this method return 2 public keys in both format for SECP256K1 and 1 public key for SECP256R1.
+     *
+     * @return the available keys of signature provider in EOS format
+     * @throws GetAvailableKeysError thrown if there are any exceptions during the get available keys process.
+     */
     @Override
     public @NotNull List<String> getAvailableKeys() throws GetAvailableKeysError {
         List<String> availableKeys = new ArrayList<>();
@@ -212,31 +229,29 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         try {
             for (String key : this.keys) {
                 PEMProcessor processor = new PEMProcessor(key);
-                availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(this.returnLegacyFormatForK1));
+                AlgorithmEmployed curve = processor.getAlgorithm();
+
+                switch (curve) {
+                    case SECP256R1:
+                        // USING_K1_NON_LEGACY_FORMAT is being used here because its value does not matter to SECP256R1 key
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
+                        break;
+
+                    case SECP256K1:
+                        // Non legacy
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
+                        // legacy
+                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_LEGACY_FORMAT));
+                        break;
+
+                    default:
+                        throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.GET_KEYS_KEY_FORMAT_NOT_SUPPORTED);
+                }
             }
         } catch (PEMProcessorError pemProcessorError) {
             throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR, pemProcessorError);
         }
 
         return availableKeys;
-    }
-
-    /**
-     * Whether getAvailableKeys should return WIF legacy format for key generated with secp256k1
-     * algorithm.  This for of the key is prefaced with "EOS" instead of "PUB_K1_".     *
-     * @return Whether getAvailableKeys return WIF legacy format for K1 key
-     */
-    public boolean isReturnLegacyFormatForK1() {
-        return returnLegacyFormatForK1;
-    }
-
-    /**
-     * Set returnLegacyFormatForK1 to true to get WIF Legacy format for secp256k1 generated public
-     * key returned from method getAvailableKeys().
-     *
-     * @param returnLegacyFormatForK1 true for getting WIF Legacy format of K1 public key on getAvailableKey
-     */
-    public void setReturnLegacyFormatForK1(boolean returnLegacyFormatForK1) {
-        this.returnLegacyFormatForK1 = returnLegacyFormatForK1;
     }
 }

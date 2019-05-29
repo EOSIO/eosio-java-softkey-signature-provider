@@ -1,5 +1,7 @@
 package one.block.eosiosoftkeysignatureprovider.error;
 
+import one.block.eosiosoftkeysignatureprovider.SoftKeySignatureProviderImpl;
+
 /**
  * Error constants that pertain to the signing of transactions using the softkey signature provider
  * implementation {@link one.block.eosiosoftkeysignatureprovider.SoftKeySignatureProviderImpl}
@@ -59,4 +61,8 @@ public class SoftKeySignatureErrorConstants {
      * Describes a failure to format the signature that must accompany a signed transaction.
      */
     public static final String SIGN_TRANS_FORMAT_SIGNATURE_ERROR = "Error when trying to format signature.";
+    /**
+     * Key curve is not supported in key transformation on {@link SoftKeySignatureProviderImpl#getAvailableKeys()}
+     */
+    public static final String GET_KEYS_KEY_FORMAT_NOT_SUPPORTED = "Error on trying to transform key in getAvailableKey(): Algorithm is not supported!";
 }
