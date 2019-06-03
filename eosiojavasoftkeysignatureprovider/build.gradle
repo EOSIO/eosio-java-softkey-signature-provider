@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    //Remove 'com.jfrog.artifactory' plugin if you are not using Artifactory
     id 'com.jfrog.artifactory' version '4.9.5'
     id 'maven-publish'
 
@@ -8,6 +9,7 @@ plugins {
 group 'one.block'
 
 repositories {
+    //Remove maven{} block if you are not using Artifactory 
     maven {
         credentials{
             username artifactory_username
@@ -17,6 +19,12 @@ repositories {
         jcenter()
         mavenCentral()
     }
+
+    //Uncomment if you are not using Artifactory
+    /*
+    jcenter()
+    mavenCentral()
+     */
 }
 
 dependencies {
@@ -27,7 +35,7 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito2:2.0.0'
 }
 
-//Changes module cache control --- Default is 24 hrs
+//Changes module cache control ---- Default is 24 hrs
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
 }
@@ -74,6 +82,7 @@ publishing {
     }
 }
 
+//Remove artifactory{} block if you are not using Artifactory
 artifactory {
     contextUrl = artifactory_contextURL
     publish {
