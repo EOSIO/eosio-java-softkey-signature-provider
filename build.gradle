@@ -7,6 +7,7 @@ buildscript {
 
 allprojects {
     repositories {
+        //Remove maven{} block if you are not using Artifactory, otherwise define your own values in the gradle.properties file
         maven {
             credentials{
                 username artifactory_username
