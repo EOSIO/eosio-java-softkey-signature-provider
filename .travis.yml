@@ -11,13 +11,6 @@ before_install:
   - echo "artifactory_repo=default" >> gradle.properties
 
 deploy:
-  - skip_cleanup: true
-  - provider: script
-    script: bash scripts/veracode-scan.sh
-    on:
-      branch:
-        - develop
-        - /^release.*$/
   - provider: script
     skip_cleanup: true
     script: "bash scripts/deploy-artifactory.sh 'android-libs-feature-local'"
