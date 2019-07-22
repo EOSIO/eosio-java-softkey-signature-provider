@@ -1,4 +1,9 @@
 language: java
+env:
+  global:
+    - ARTIFACTORY_CONTEXT_URL=https://blockone.jfrog.io/blockone
+    - ARTIFACTORY_REPO=android-libs-scratch-local
+    - ARTIFACTORY_LIBS_PATH=https://blockone.jfrog.io/blockone/android-libs
 before_cache: 
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -6,17 +11,24 @@ before_cache:
 before_install: 
   - echo "artifactory_username=$ARTIFACTORY_USERNAME" > gradle.properties
   - echo "artifactory_password=$ARTIFACTORY_PASSWORD" >> gradle.properties
-  - echo "artifactory_path_android_libraries=https://blockone.jfrog.io/blockone/android-libs" >> gradle.properties
-  - echo "artifactory_contextURL=https://blockone.jfrog.io/blockone" >> gradle.properties
-  - echo "artifactory_repo=default" >> gradle.properties
+  - echo "artifactory_path_android_libraries=$ARTIFACTORY_LIBS_PATH" >> gradle.properties
+  - echo "artifactory_contextURL=$ARTIFACTORY_CONTEXT_URL" >> gradle.properties
+  - echo "artifactory_repo=$ARTIFACTORY_REPO" >> gradle.properties
+
+before_deploy: 
+  - echo "artifactory_username=$ARTIFACTORY_USERNAME" > gradle.properties
+  - echo "artifactory_password=$ARTIFACTORY_PASSWORD" >> gradle.properties
+  - echo "artifactory_path_android_libraries=$ARTIFACTORY_LIBS_PATH" >> gradle.properties
+  - echo "artifactory_contextURL=$ARTIFACTORY_CONTEXT_URL" >> gradle.properties
+  - echo "artifactory_repo=$ARTIFACTORY_REPO" >> gradle.properties
 
 deploy:
   - provider: script
     skip_cleanup: true
     script: "bash scripts/deploy-artifactory.sh 'android-libs-feature-local'"
     on:
-      branch: 
-        - /^feature.*$/
+      all_branches: true
+      condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^feature\/.*$
   # develop deploys      
   - provider: script
     skip_cleanup: true
@@ -24,14 +36,13 @@ deploy:
     on:
       branch: 
         - develop
-  # release branches and      
+  # release branches and master     
   - provider: script
     skip_cleanup: true
     script: "bash scripts/deploy-artifactory.sh 'android-libs-release-local'"
     on:
-      branch: 
-        - master
-        - /^release.*$/
+      all_branches: true
+      condition: $TRAVIS_BRANCH == master || ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^release\/.*$
   # tagged releases from master, go to distribution
   - provider: script
     skip_cleanup: true
