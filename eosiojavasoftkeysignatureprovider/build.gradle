@@ -16,8 +16,7 @@ repositories {
             password artifactory_password
         }
         url artifactory_path_android_libraries
-        jcenter()
-        mavenCentral()
+        
     }
 
     //Uncomment if you are not using Artifactory
