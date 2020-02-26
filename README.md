@@ -24,8 +24,9 @@ Softkey Signature Provider is an example pluggable signature provider for [EOSIO
 - [License & Legal](#license)
 
 ## Updates
+Version 0.1.3.  The version consumes the new eosio-java library version 0.1.2.
 
-Current version number is 0.1.2.  The new version includes updates on Mockito and Powermock dependencies to prevent the build
+Version 0.1.2.  The version includes updates on Mockito and Powermock dependencies to prevent the build
 error "Failed to transform...using Jetifier." that is occurring with new versions of AndroidX.
 
 # About Signature Providers
