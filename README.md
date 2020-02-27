@@ -24,8 +24,9 @@ Softkey Signature Provider is an example pluggable signature provider for [EOSIO
 - [License & Legal](#license)
 
 ## Updates
+Version 0.1.3.  The version consumes the new eosio-java library version 0.1.2.
 
-Current version number is 0.1.2.  The new version includes updates on Mockito and Powermock dependencies to prevent the build
+Version 0.1.2.  The version includes updates on Mockito and Powermock dependencies to prevent the build
 error "Failed to transform...using Jetifier." that is occurring with new versions of AndroidX.
 
 # About Signature Providers
@@ -53,8 +54,8 @@ This provider is intended to be used in conjunction with [EOSIO SDK for Java](ht
 To use Softkey Signature Provider with EOSIO SDK for Java in your app, add the following modules to your `build.gradle`:
 
 ```java
-implementation 'one.block:eosiojava:0.1.0'
-implementation 'one.block:eosiojavasoftkeysignatureprovider:0.1.2'
+implementation 'one.block:eosiojava:0.1.2'
+implementation 'one.block:eosiojavasoftkeysignatureprovider:0.1.3'
 ```
 
 If you are using Softkey Signature Provider, or any library that depends on it, in an Android application you must also add the following to your application's `build.gradle` file in the `android` section:
