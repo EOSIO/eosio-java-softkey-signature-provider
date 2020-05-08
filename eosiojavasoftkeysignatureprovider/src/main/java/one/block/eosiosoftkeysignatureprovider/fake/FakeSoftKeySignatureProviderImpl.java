@@ -104,7 +104,7 @@ public class FakeSoftKeySignatureProviderImpl {
         this.keys.add(privateKeyPem);
     }
 
-    public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull FakeEosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
+    public @NotNull FakeEosioTransactionSignatureResponse signTransaction(@NotNull FakeEosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
 
         if (eosioTransactionSignatureRequest.getSigningPublicKeys().isEmpty()) {
             throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_KEY_LIST);
@@ -210,6 +210,6 @@ public class FakeSoftKeySignatureProviderImpl {
             }
         }
 
-        return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
+        return new FakeEosioTransactionSignatureResponse(serializedTransaction, serializedContextFreeData, signatures, null);
     }
 }
