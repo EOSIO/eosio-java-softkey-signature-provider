@@ -26,6 +26,11 @@ public class SoftKeySignatureErrorConstants {
      */
     public static final String SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR = "Error when trying to prepare signable transaction from serialized transaction %s";
     /**
+     * The signable transaction preparation failed when including context free data.  There may have been a problem with the
+     * provided serialized transaction or serialized context free data.
+     */
+    public static final String SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR = "Error when trying to prepare signable transaction from serialized transaction %s and serialized context free data %s";
+    /**
      * The list of keys to be used for signing was empty.
      */
     public static final String SIGN_TRANS_EMPTY_KEY_LIST = "List of public keys to sign can't be empty!";

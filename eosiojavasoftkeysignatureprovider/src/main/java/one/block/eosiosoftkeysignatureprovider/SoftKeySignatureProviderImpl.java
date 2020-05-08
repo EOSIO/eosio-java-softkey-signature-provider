@@ -122,6 +122,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
         // Getting serializedTransaction and preparing signable transaction
         String serializedTransaction = eosioTransactionSignatureRequest.getSerializedTransaction();
+        String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
 
         // This is the un-hashed message which is used to recover public key
         byte[] message;
@@ -130,9 +131,12 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         byte[] hashedMessage;
 
         try {
-            message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId()).toUpperCase());
+            message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
             hashedMessage = Sha256Hash.hash(message);
         } catch (EOSFormatterError eosFormatterError) {
+            if (!serializedContextFreeData.isEmpty()) {
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR, serializedTransaction, serializedContextFreeData), eosFormatterError);
+            }
             throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
         }
 
