@@ -13,6 +13,10 @@ import one.block.eosiojava.utilities.EOSFormatter;
 import one.block.eosiosoftkeysignatureprovider.SoftKeySignatureProviderImpl;
 import one.block.eosiosoftkeysignatureprovider.error.ImportKeyError;
 import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstants;
+import one.block.eosiosoftkeysignatureprovider.fake.FakeEosioTransactionSignatureRequest;
+import one.block.eosiosoftkeysignatureprovider.fake.FakeEosioTransactionSignatureResponse;
+import one.block.eosiosoftkeysignatureprovider.fake.FakeSoftKeySignatureProviderImpl;
+
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
@@ -138,6 +142,38 @@ public class SoftKeySignatureProviderImplTest {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
             assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(1, request.getSigningPublicKeys().size());
+            assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
+        } catch (SignTransactionError signTransactionError) {
+            signTransactionError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+    }
+
+    @Test
+    public void signTransactionWithContextFreeDataTest() {
+        String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
+        String publicKeyR1EOS = "PUB_R1_71AYFp3Aasa2od6bwmXEQ13MMfqv4wuJwCRx1Z1dbRifrQEqZt";
+
+        String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
+        String serializedContextFreeData = "c21bfb5ad4b64bfd04838b3b14f0ce0c7b92136cac69bfed41bef92f95a9bb20";
+        List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
+        String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
+        FakeEosioTransactionSignatureRequest request = new FakeEosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false, serializedContextFreeData);
+        FakeSoftKeySignatureProviderImpl provider = new FakeSoftKeySignatureProviderImpl();
+
+        try {
+            provider.importKey(privateKeyR1EOS);
+        } catch (ImportKeyError importKeyError) {
+            importKeyError.printStackTrace();
+            fail("Should not fail here!!!");
+        }
+
+        try {
+            FakeEosioTransactionSignatureResponse response = provider.signTransaction(request);
+            assertNotNull(response);
+            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedContextFreeData, response.getSerializedContextFreeData());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
         } catch (SignTransactionError signTransactionError) {
