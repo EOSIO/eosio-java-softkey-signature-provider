@@ -1,4 +1,4 @@
-package one.block.eosiosoftkeysignatureprovider;
+package one.block.eosiosoftkeysignatureprovider.fake;
 
 
 import one.block.eosiojava.enums.AlgorithmEmployed;
@@ -34,7 +34,7 @@ import java.util.Set;
  * implementation is NOT secure and should only be used for educational purposes.  It is NOT
  * advisable to store private keys outside of secure devices like TEE's and SE's.
  */
-public class SoftKeySignatureProviderImpl implements ISignatureProvider {
+public class FakeSoftKeySignatureProviderImpl {
 
     /**
      * Keep a Set (Unique) of private keys in PEM format
@@ -104,8 +104,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         this.keys.add(privateKeyPem);
     }
 
-    @Override
-    public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull EosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
+    public @NotNull EosioTransactionSignatureResponse signTransaction(@NotNull FakeEosioTransactionSignatureRequest eosioTransactionSignatureRequest) throws SignTransactionError {
 
         if (eosioTransactionSignatureRequest.getSigningPublicKeys().isEmpty()) {
             throw new SignTransactionError(SoftKeySignatureErrorConstants.SIGN_TRANS_EMPTY_KEY_LIST);
@@ -122,8 +121,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
         // Getting serializedTransaction and preparing signable transaction
         String serializedTransaction = eosioTransactionSignatureRequest.getSerializedTransaction();
-        //TODO: Uncomment once eosio-java is merged
-        //String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
+        String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
 
         // This is the un-hashed message which is used to recover public key
         byte[] message;
@@ -132,15 +130,12 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         byte[] hashedMessage;
 
         try {
-            //TODO: Uncomment once eosio-java is merged
-            //message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
-            message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId()).toUpperCase());
+            message = Hex.decode(FakeEOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
             hashedMessage = Sha256Hash.hash(message);
         } catch (EOSFormatterError eosFormatterError) {
-            //TODO: Uncomment once eosio-java is merged
-//            if (!serializedContextFreeData.isEmpty()) {
-//                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR, serializedTransaction, serializedContextFreeData), eosFormatterError);
-//            }
+            if (!serializedContextFreeData.isEmpty()) {
+                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR, serializedTransaction, serializedContextFreeData), eosFormatterError);
+            }
             throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
         }
 
@@ -216,50 +211,5 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         }
 
         return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
-    }
-
-    /**
-     * Gets available keys from signature provider <br> Check createSignatureRequest() flow in
-     * "complete workflow" for more detail of how the method is used.
-     * <p>
-     * Public key of SECP256K1 has 2 types of format in EOSIO which are "EOS" and "PUB_K1_" so this method return 2 public keys in both format for SECP256K1 and 1 public key for SECP256R1.
-     *
-     * @return the available keys of signature provider in EOS format
-     * @throws GetAvailableKeysError thrown if there are any exceptions during the get available keys process.
-     */
-    @Override
-    public @NotNull List<String> getAvailableKeys() throws GetAvailableKeysError {
-        List<String> availableKeys = new ArrayList<>();
-        if (this.keys.isEmpty()) {
-            return availableKeys;
-        }
-
-        try {
-            for (String key : this.keys) {
-                PEMProcessor processor = new PEMProcessor(key);
-                AlgorithmEmployed curve = processor.getAlgorithm();
-
-                switch (curve) {
-                    case SECP256R1:
-                        // USING_K1_NON_LEGACY_FORMAT is being used here because its value does not matter to SECP256R1 key
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
-                        break;
-
-                    case SECP256K1:
-                        // Non legacy
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_NON_LEGACY_FORMAT));
-                        // legacy
-                        availableKeys.add(processor.extractEOSPublicKeyFromPrivateKey(USING_K1_LEGACY_FORMAT));
-                        break;
-
-                    default:
-                        throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.GET_KEYS_KEY_FORMAT_NOT_SUPPORTED);
-                }
-            }
-        } catch (PEMProcessorError pemProcessorError) {
-            throw new GetAvailableKeysError(SoftKeySignatureErrorConstants.CONVERT_TO_PEM_EMPTY_ERROR, pemProcessorError);
-        }
-
-        return availableKeys;
     }
 }
