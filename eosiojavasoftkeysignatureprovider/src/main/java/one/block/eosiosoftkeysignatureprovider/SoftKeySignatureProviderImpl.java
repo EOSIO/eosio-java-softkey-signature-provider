@@ -122,7 +122,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
         // Getting serializedTransaction and preparing signable transaction
         String serializedTransaction = eosioTransactionSignatureRequest.getSerializedTransaction();
-        //TODO: Uncomment once eosio-java is merged
+        //TODO: Fix once eosio-java is merged
         //String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
 
         // This is the un-hashed message which is used to recover public key
@@ -132,12 +132,12 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         byte[] hashedMessage;
 
         try {
-            //TODO: Uncomment once eosio-java is merged
+            //TODO: Fix once eosio-java is merged
             //message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
             message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId()).toUpperCase());
             hashedMessage = Sha256Hash.hash(message);
         } catch (EOSFormatterError eosFormatterError) {
-            //TODO: Uncomment once eosio-java is merged
+            //TODO: Fix once eosio-java is merged
 //            if (!serializedContextFreeData.isEmpty()) {
 //                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR, serializedTransaction, serializedContextFreeData), eosFormatterError);
 //            }
@@ -215,7 +215,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             }
         }
 
-        //TODO: Uncomment once eosio-java is merged
+        //TODO: Fix once eosio-java is merged
         //return new EosioTransactionSignatureResponse(serializedTransaction, serializedContextFreeData, signatures, null);
         return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
     }

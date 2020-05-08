@@ -150,6 +150,7 @@ public class SoftKeySignatureProviderImplTest {
         }
     }
 
+    //TODO: Fix once eosio-java is merged
     @Test
     public void signTransactionWithContextFreeDataTest() {
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
