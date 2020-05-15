@@ -150,7 +150,6 @@ public class SoftKeySignatureProviderImplTest {
         }
     }
 
-    //TODO: Fix once eosio-java is merged
     @Test
     public void signTransactionWithContextFreeDataTest() {
         String privateKeyR1EOS = "PVT_R1_g6vV9tiGqN3LkhD53pVUbxDn76PuVeR6XfmJzrnLR3PbGWLys";
@@ -160,8 +159,8 @@ public class SoftKeySignatureProviderImplTest {
         String serializedContextFreeData = "c21bfb5ad4b64bfd04838b3b14f0ce0c7b92136cac69bfed41bef92f95a9bb20";
         List<String> publicKeys = Collections.singletonList(publicKeyR1EOS);
         String chainId = "687fa513e18843ad3e820744f4ffcf93b1354036d80737db8dc444fe4b15ad17";
-        FakeEosioTransactionSignatureRequest request = new FakeEosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false, serializedContextFreeData);
-        FakeSoftKeySignatureProviderImpl provider = new FakeSoftKeySignatureProviderImpl();
+        EosioTransactionSignatureRequest request = new EosioTransactionSignatureRequest(serializedTransaction, publicKeys, chainId, null, false, serializedContextFreeData);
+        SoftKeySignatureProviderImpl provider = new SoftKeySignatureProviderImpl();
 
         try {
             provider.importKey(privateKeyR1EOS);
@@ -171,7 +170,7 @@ public class SoftKeySignatureProviderImplTest {
         }
 
         try {
-            FakeEosioTransactionSignatureResponse response = provider.signTransaction(request);
+            EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
             assertEquals(serializedTransaction, response.getSerializeTransaction());
             assertEquals(serializedContextFreeData, response.getSerializedContextFreeData());

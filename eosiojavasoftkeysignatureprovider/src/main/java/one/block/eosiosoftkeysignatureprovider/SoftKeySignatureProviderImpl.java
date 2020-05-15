@@ -122,8 +122,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
 
         // Getting serializedTransaction and preparing signable transaction
         String serializedTransaction = eosioTransactionSignatureRequest.getSerializedTransaction();
-        //TODO: Fix once eosio-java is merged
-        //String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
+        String serializedContextFreeData = eosioTransactionSignatureRequest.getSerializedContextFreeData();
 
         // This is the un-hashed message which is used to recover public key
         byte[] message;
@@ -132,15 +131,9 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
         byte[] hashedMessage;
 
         try {
-            //TODO: Fix once eosio-java is merged
-            //message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
-            message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId()).toUpperCase());
+            message = Hex.decode(EOSFormatter.prepareSerializedTransactionForSigning(serializedTransaction, eosioTransactionSignatureRequest.getChainId(), serializedContextFreeData).toUpperCase());
             hashedMessage = Sha256Hash.hash(message);
         } catch (EOSFormatterError eosFormatterError) {
-            //TODO: Fix once eosio-java is merged
-//            if (!serializedContextFreeData.isEmpty()) {
-//                throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_OR_CONTEXT_FREE_DATA_ERROR, serializedTransaction, serializedContextFreeData), eosFormatterError);
-//            }
             throw new SignTransactionError(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction), eosFormatterError);
         }
 
