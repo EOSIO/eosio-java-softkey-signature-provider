@@ -208,9 +208,7 @@ public class SoftKeySignatureProviderImpl implements ISignatureProvider {
             }
         }
 
-        //TODO: Fix once eosio-java is merged
-        //return new EosioTransactionSignatureResponse(serializedTransaction, serializedContextFreeData, signatures, null);
-        return new EosioTransactionSignatureResponse(serializedTransaction, signatures, null);
+        return new EosioTransactionSignatureResponse(serializedTransaction, serializedContextFreeData, signatures, null);
     }
 
     /**
