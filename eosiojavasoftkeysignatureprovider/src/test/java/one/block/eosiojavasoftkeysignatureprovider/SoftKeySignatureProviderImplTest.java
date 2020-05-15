@@ -13,9 +13,6 @@ import one.block.eosiojava.utilities.EOSFormatter;
 import one.block.eosiosoftkeysignatureprovider.SoftKeySignatureProviderImpl;
 import one.block.eosiosoftkeysignatureprovider.error.ImportKeyError;
 import one.block.eosiosoftkeysignatureprovider.error.SoftKeySignatureErrorConstants;
-import one.block.eosiosoftkeysignatureprovider.fake.FakeEosioTransactionSignatureRequest;
-import one.block.eosiosoftkeysignatureprovider.fake.FakeEosioTransactionSignatureResponse;
-import one.block.eosiosoftkeysignatureprovider.fake.FakeSoftKeySignatureProviderImpl;
 
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
@@ -141,7 +138,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
         } catch (SignTransactionError signTransactionError) {
@@ -172,7 +169,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(serializedContextFreeData, response.getSerializedContextFreeData());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
@@ -255,7 +252,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_"));
         } catch (SignTransactionError signTransactionError) {
@@ -288,7 +285,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(2, request.getSigningPublicKeys().size());
             assertEquals(request.getSigningPublicKeys().size(), response.getSignatures().size());
 
@@ -421,7 +418,7 @@ public class SoftKeySignatureProviderImplTest {
 
     @Test
     public void signTransactionTest_thenFailWithPrepareSignableTransaction() throws SignTransactionError {
-        String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E6700";
+        String serializedTransaction = "8BC2A35CF56E6CC25F7F000000000100A6823403EA3055000000572D3CCDCD01000000000000C03400000000A8ED32322A000000000000C034000000000000A682A08601000000000004454F530000000009536F6D657468696E67000000000000000000000000000000000000000000000000000000000000000000";
         exceptionRule.expect(SignTransactionError.class);
         exceptionRule.expectMessage(String.format(SoftKeySignatureErrorConstants.SIGN_TRANS_PREPARE_SIGNABLE_TRANS_ERROR, serializedTransaction));
         exceptionRule.expectCause(IsInstanceOf.<EosioError>instanceOf(EOSFormatterError.class));
@@ -443,7 +440,7 @@ public class SoftKeySignatureProviderImplTest {
 
         try {
             PowerMockito.mockStatic(EOSFormatter.class);
-            when(EOSFormatter.prepareSerializedTransactionForSigning(any(String.class), any(String.class))).thenThrow(new EOSFormatterError());
+            when(EOSFormatter.prepareSerializedTransactionForSigning(any(String.class), any(String.class), any(String.class))).thenThrow(new EOSFormatterError());
         } catch (EOSFormatterError eosFormatterError) {
             eosFormatterError.printStackTrace();
             fail("Should not fail here!!!");
