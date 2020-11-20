@@ -137,7 +137,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_R1_"));
         } catch (SignTransactionError signTransactionError) {
@@ -219,7 +219,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(1, request.getSigningPublicKeys().size());
             assertTrue(response.getSignatures().get(0).contains("SIG_"));
         } catch (SignTransactionError signTransactionError) {
@@ -252,7 +252,7 @@ public class SoftKeySignatureProviderImplTest {
         try {
             EosioTransactionSignatureResponse response = provider.signTransaction(request);
             assertNotNull(response);
-            assertEquals(serializedTransaction, response.getSerializeTransaction());
+            assertEquals(serializedTransaction, response.getSerializedTransaction());
             assertEquals(2, request.getSigningPublicKeys().size());
             assertEquals(request.getSigningPublicKeys().size(), response.getSignatures().size());
 
