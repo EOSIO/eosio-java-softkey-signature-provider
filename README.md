@@ -1,5 +1,5 @@
 ![Java Logo](img/java-logo.png)
-# EOSIO SDK for Java: Softkey Signature Provider ![EOSIO Alpha](https://img.shields.io/badge/EOSIO-Alpha-blue.svg)
+# EOSIO SDK for Java: Softkey Signature Provider
 
 [![Software License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/EOSIO/eosio-java-softkey-signature-provider/blob/master/LICENSE)
 ![Language Java](https://img.shields.io/badge/Language-Java-yellow.svg)
@@ -24,10 +24,9 @@ Softkey Signature Provider is an example pluggable signature provider for [EOSIO
 - [License & Legal](#license)
 
 ## Updates
-Version 0.1.3.  The version consumes the new eosio-java library version 0.1.2.
-
-Version 0.1.2.  The version includes updates on Mockito and Powermock dependencies to prevent the build
-error "Failed to transform...using Jetifier." that is occurring with new versions of AndroidX.
+- Version 1.0.0.  This version consumes the new eosio-java library version 1.0.0.
+- Version 0.1.3.  The version consumes the new eosio-java library version 0.1.2.
+- Version 0.1.2.  The version includes updates on Mockito and Powermock dependencies to prevent the build error "Failed to transform...using Jetifier." that is occurring with new versions of AndroidX.
 
 # About Signature Providers
 
@@ -54,8 +53,8 @@ This provider is intended to be used in conjunction with [EOSIO SDK for Java](ht
 To use Softkey Signature Provider with EOSIO SDK for Java in your app, add the following modules to your `build.gradle`:
 
 ```java
-implementation 'one.block:eosiojava:0.1.2'
-implementation 'one.block:eosiojavasoftkeysignatureprovider:0.1.3'
+implementation 'one.block:eosiojava:1.0.0'
+implementation 'one.block:eosiojavasoftkeysignatureprovider:1.0.0'
 ```
 
 If you are using Softkey Signature Provider, or any library that depends on it, in an Android application you must also add the following to your application's `build.gradle` file in the `android` section:
@@ -112,7 +111,7 @@ try {
 
 ## Android Example App
 
-If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app)-a working application that fetches an account's token balance and pushes a transfer action.
+If you'd like to see EOSIO SDK for Java: Softkey Signature Provider in action, check out our open source [Android Example App](https://github.com/EOSIO/eosio-java-android-example-app)--a working application that fetches an account's token balance and pushes a transfer action.
 
 ## Library Methods
 
